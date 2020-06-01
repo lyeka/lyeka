@@ -19,8 +19,8 @@ jobs:
           # 编译并推送至阿里云
           # todo 现在只有一个版本的镜像，无法回滚；考虑在release分支做多版本镜像用于回滚
           docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PW }} registry.cn-hangzhou.aliyuncs.com
-          docker build -t ${{ secrets.ALIYUN_REGISTRY }}:preview .
-          docker push ${{ secrets.ALIYUN_REGISTRY }}:preview
+          docker build -t ${{ secrets.ALIYUN_REGISTRY }}:latest .
+          docker push ${{ secrets.ALIYUN_REGISTRY }}:latest
 
   deploy:
     runs-on: ubuntu-latest
