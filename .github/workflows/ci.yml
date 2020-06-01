@@ -1,4 +1,4 @@
-name: preview
+name: ci
 on:
   push:
     branches:
