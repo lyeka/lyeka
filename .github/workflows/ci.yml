@@ -1,0 +1,35 @@
+name: preview
+on:
+  push:
+    branches:
+      - master
+    pull_request:
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    # needs: [check]   # 先允许check失败，因为不知道github action的失败判定逻辑
+    steps:
+      # 获取代码仓库
+      - uses: actions/checkout@v2
+
+      - name: docker build
+        run: |
+          # 编译并推送至阿里云
+          # todo 现在只有一个版本的镜像，无法回滚；考虑在release分支做多版本镜像用于回滚
+          docker login --username=${{ secrets.ALIYUN_REGISTRY_USER }} --password=${{ secrets.ALIYUN_REGISTRY_PW }} registry.cn-hangzhou.aliyuncs.com
+          docker build -t ${{ secrets.ALIYUN_REGISTRY }}:preview .
+          docker push ${{ secrets.ALIYUN_REGISTRY }}:preview
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.ALIYUN_HOST }}
+          username: ${{ secrets.ALIYUN_DEPLOY_USER }}
+          password: ${{ secrets.ALIYUN_DEPLOY_PW }}
+          port: 22
+          script: cd ~/vhost/lyeka && docker-compose pull && docker-compose up -d

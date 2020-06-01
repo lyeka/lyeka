@@ -1,0 +1,7 @@
+version: '2'
+services:
+  app:
+    image: registry.cn-hangzhou.aliyuncs.com/yeka/blog:latest
+    ports:
+      - "1313:80"
+    restart: always
