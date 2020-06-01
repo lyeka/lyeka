@@ -1,6 +1,6 @@
 baseURL = "http://icewater.xyz"
 title = "lyeka"
-theme = "hugo-notepadium"
+theme = "hugo-notepadium-lyeka"
 copyright = "©2020 lyeka. <span> &nbsp;|&nbsp; </span><span><a href='http://www.beian.miit.gov.cn/' target='_blank'>粤ICP备20037038号-1</a></span>"
 summaryLength = 30
 
@@ -56,5 +56,11 @@ showTags = true             # /tags/
 [[params.nav.custom]]
 title = "About"
 url = "/about"
+
+[params.utterances]
+enable = true
+repo = "lyeka/hugo-comment"
+issueTerm = "pathname"
+theme = "github-light"
 
 

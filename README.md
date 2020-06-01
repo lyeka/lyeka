@@ -4,7 +4,10 @@
 依赖：
 - hugo v0.72.0
 
+done
+- 改用修改后的模板
+- 接入 utterances 评论系统
+
 todo
-- ci 中集成 hugo，自动生成静态文件
-- 接入评论
+- ci 集成 hugo， 自动执行 `hugo` 生成静态文件
 - about me
