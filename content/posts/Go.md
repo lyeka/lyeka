@@ -1,6 +1,8 @@
 ---
 title: "Go语言基础"
 date: 2020-06-01T10:29:35+08:00
+tags: ["go"]
+categories: ["编程"]
 draft: false
 ---
 
