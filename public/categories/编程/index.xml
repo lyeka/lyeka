@@ -7,10 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 lyeka. &lt;span&gt; &amp;nbsp;|&amp;nbsp; &lt;/span&gt;&lt;span&gt;&lt;a href=&#39;http://www.beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;粤ICP备20037038号-1&lt;/a&gt;&lt;/span&gt;</copyright>
-    <lastBuildDate>Mon, 01 Jun 2020 10:29:35 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 05 Jun 2020 10:29:35 +0800</lastBuildDate>
     
         <atom:link href="/categories/%E7%BC%96%E7%A8%8B/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>MongoDB中文文档</title>
+      <link>/posts/runtime/</link>
+      <pubDate>Fri, 05 Jun 2020 10:29:35 +0800</pubDate>
+      
+      <guid>/posts/runtime/</guid>
+      <description>runtime 运行时 什么是 runtime 在计算机领域中，经常会接触到 runtime 这个概念，那么</description>
+      
+    </item>
     
     <item>
       <title>Go语言基础</title>
@@ -29,16 +39,6 @@
       
       <guid>/posts/mogodb%E4%B8%AD%E6%96%87%E6%96%87%E6%A1%A3/</guid>
       <description>MongoDB [TOC] 安装 版本 v4.2 wget -qO - https://www.mongodb.org/static/pgp/server-4.2.asc | sudo apt-key add - echo &amp;#34;deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.2 multiverse&amp;#34; | sudo tee /etc/apt/sources.list.d/mongodb-org-4.2.list sudo apt-get</description>
-      
-    </item>
-    
-    <item>
-      <title>MongoDB中文文档</title>
-      <link>/posts/runtime/</link>
-      <pubDate>Mon, 01 Jun 2020 10:29:35 +0800</pubDate>
-      
-      <guid>/posts/runtime/</guid>
-      <description>runtime 运行时 什么是 runtime 在计算机领域中，经常会接触到 runtime 这个概念，那么</description>
       
     </item>
     
