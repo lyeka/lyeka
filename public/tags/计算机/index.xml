@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>go on lyeka</title>
-    <link>/tags/go/</link>
-    <description>Recent content in go on lyeka</description>
+    <title>计算机 on lyeka</title>
+    <link>/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/</link>
+    <description>Recent content in 计算机 on lyeka</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-cn</language>
     <copyright>©2020 lyeka. &lt;span&gt; &amp;nbsp;|&amp;nbsp; &lt;/span&gt;&lt;span&gt;&lt;a href=&#39;http://www.beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;粤ICP备20037038号-1&lt;/a&gt;&lt;/span&gt;</copyright>
     <lastBuildDate>Mon, 01 Jun 2020 10:29:35 +0800</lastBuildDate>
     
-        <atom:link href="/tags/go/index.xml" rel="self" type="application/rss+xml" />
+        <atom:link href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Go语言基础</title>
-      <link>/posts/go/</link>
-      <pubDate>Mon, 01 Jun 2020 10:29:35 +0800</pubDate>
-      
-      <guid>/posts/go/</guid>
-      <description>Go语言基础 数组，字符串与切片 Go语言中，数组，字符串，切片</description>
-      
-    </item>
     
     <item>
       <title>MongoDB中文文档</title>
