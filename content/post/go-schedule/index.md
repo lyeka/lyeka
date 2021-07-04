@@ -6,7 +6,6 @@ image: index.jpg
 math: 
 license: 
 hidden: false
-comments: true
 categories:
     - program
     - go
