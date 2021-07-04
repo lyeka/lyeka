@@ -1,35 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>go on lyeka</title>
-    <link>/tags/go/</link>
-    <description>Recent content in go on lyeka</description>
+    <title>go on 路叶卡的自留地</title>
+    <link>https://example.com/tags/go/</link>
+    <description>Recent content in go on 路叶卡的自留地</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>zh-cn</language>
-    <copyright>©2020 lyeka. &lt;span&gt; &amp;nbsp;|&amp;nbsp; &lt;/span&gt;&lt;span&gt;&lt;a href=&#39;http://www.beian.miit.gov.cn/&#39; target=&#39;_blank&#39;&gt;粤ICP备20037038号-1&lt;/a&gt;&lt;/span&gt;</copyright>
-    <lastBuildDate>Fri, 05 Jun 2020 10:29:35 +0800</lastBuildDate>
-    
-        <atom:link href="/tags/go/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <language>en-us</language>
+    <lastBuildDate>Fri, 02 Jul 2021 11:55:58 +0800</lastBuildDate><atom:link href="https://example.com/tags/go/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>什么是运行时（runtime）</title>
-      <link>/posts/runtime/</link>
-      <pubDate>Fri, 05 Jun 2020 10:29:35 +0800</pubDate>
+      <title>Go Schedule</title>
+      <link>https://example.com/p/go-schedule/</link>
+      <pubDate>Fri, 02 Jul 2021 11:55:58 +0800</pubDate>
       
-      <guid>/posts/runtime/</guid>
-      <description>runtime 运行时 什么是 runtime 在计算机领域中，经常会接触到 runtime 这个概念，那么</description>
-      
-    </item>
-    
-    <item>
-      <title>Go语言基础</title>
-      <link>/posts/go/</link>
-      <pubDate>Mon, 01 Jun 2020 10:29:35 +0800</pubDate>
-      
-      <guid>/posts/go/</guid>
-      <description>Go语言基础 数组，字符串与切片 Go语言中，数组，字符串，切片</description>
-      
+      <guid>https://example.com/p/go-schedule/</guid>
+      <description>GMP调度模型 本文Go源码版本为Go 1.14，示例代码只节选了相关的部分
+Go调度模型发展历史  单线程调度
+ GM模型    多线程调度
+  GM模型
+  全局共享G队列，锁竞争严重
+    任务窃取调度
+  GMP模型
+  G需要主动让出CPU资源才能触发调度
+  饥饿问题
+  STW时间过长
+    抢占式调度
+ 基于协作的抢占式调度（Go1.2 - Go1.13)  利用编译器注入函数，G在发送函数调用式会执行注入的函数检查是否需要执行抢占 在GC STW或者系统监控（sysmon）发行G运行过长时发出抢占请求，让G让出 如果无函数调用，例如for循环将导致无法触发抢占   基于信号的抢占式调度（Go1.14 - ~)  程序启动时注册SIGURG信号处理函数 GC栈扫描时触发抢占 -&amp;gt; 发送 SIGURG信号 操作系统中断线程，触发之前注册的函数进行一系列调度      非均匀内存访问调度（提案）
+ 拆分全局资源（网络轮询器，计数器等），让各个P就近获取，减少锁竞争，增加数据局部性    GMP模型 G: Goroutine，用户态线程，Go调度执行的基本单位，Go调度器管理</description>
     </item>
     
   </channel>
