@@ -1,4 +1,4 @@
-# WIW
+# lyeka
 Where I Write
 
 ## requirement
@@ -28,5 +28,4 @@ theme:  [hugo-theme-stack](https://github.com/CaiJimmy/hugo-theme-stack)
 ## TODO
 
 - [ ] [TOC scroll](https://github.com/CaiJimmy/hugo-theme-stack/pull/247)
-- [ ] Deploy to my site
 - [ ] Comment

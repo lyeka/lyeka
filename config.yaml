@@ -1,11 +1,9 @@
-baseurl: http://icewater.xyz
+baseurl: http://www.icewater.xyz
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 5
 title: 路叶卡的自留地
 
-# Change it to your Disqus shortname before using
-disqusShortname: hugo-theme-stack
 
 # GA Tracking ID
 googleAnalytics:
@@ -27,7 +25,7 @@ params:
 
     footer:
         since: 2020
-        customText:
+        customText: <span><a href='http://www.beian.miit.gov.cn/' target='_blank'>粤ICP备20037038号-1</a></span>
 
     dateFormat:
         published: Jan 02, 2006
@@ -49,12 +47,13 @@ params:
 
     comments:
         enabled: true
-        provider: disqus
+        provider: utterances
 
         utterances:
-            repo:
+            repo: lyeka/hugo-comment
             issueTerm: pathname
             label:
+            theme: github-light
 
         remark42:
             host:
