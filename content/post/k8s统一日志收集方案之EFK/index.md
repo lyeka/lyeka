@@ -7,6 +7,11 @@ math:
 license: 
 hidden: false
 draft: true
+categories:
+  - k8s
+tags:
+  - EFK
+  - TODO
 ---
 
 ## 常见日志管理方案
