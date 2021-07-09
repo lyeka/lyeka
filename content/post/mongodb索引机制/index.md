@@ -96,7 +96,127 @@ WT默认的存储结构为B树。
 
 所以最准确的说法是MongoDB在V3.2之后索引采用B+Tree。
 
+TODO 补充MonogoDB B+Tree索引示意图
 
+## MongDB索引
+
+### 索引类型
+
+支持
+
+- 单字段索引
+- 复合（多字段）索引
+- 多级类型索引（Multikey Index）
+- 地理空间索引（Geospatial Index）
+- 文本索引
+- 哈希索引
+
+#### 单字段、复合索引
+
+同RMDBS一样，MongoDB支持单字段与多字段索引
+
+```shell
+# 单字段索引
+db.products.createIndex( { name: 1 } )
+# 复合索引
+db.products.createIndex(
+  { item: 1, quantity: -1 } ,
+  { name: "query for inventory" }
+)
+```
+
+但是MongoDB的索引需要指定顺序（MySQL中不能指定），1为升序-1为降序，MongoDB会按照指定的顺序构建索引树。
+
+显示指定顺序有利于使用复合索引作排序，在某些场景需要其中一些字段降序，另外字段升序排序的话可以使用到。
+
+#### 多级类型索引 
+
+Multikey 索引主要的作用是给数组中的对象建立索引，利用点表示法声明
+
+```shell
+db.spu.createIndex( { sku.price: 1 } ))
+```
+
+#### 地理空间索引 
+
+支持两种特殊索引
+
+- [2d indexes](https://docs.mongodb.com/manual/core/2d/)
+- [2dsphere indexes](https://docs.mongodb.com/manual/core/2dsphere/)
+
+#### 文本索引
+
+支持单字段以及多字段文本索引，但是一个Collection只能有一个文本索引。
+
+```shell
+db.reviews1.createIndex( { comments: "text" } )
+db.reviews2.createIndex(
+   {
+     subject: "text",
+     comments: "text"
+   }
+ )
+```
+
+支持
+
+1. 包含搜索列表中的任一文本
+
+   ```shell
+   db.stores.find( { $text: { $search: "java coffee shop" } } )
+   ```
+
+2. 短语匹配
+
+   ```shell
+   db.stores.find( { $text: { $search: "java \"coffee shop\"" } } )
+   ```
+
+3. 词语排查
+
+     ```shell
+     db.stores.find( { $text: { $search: "java shop -coffee" } } )
+     ```
+
+4. 匹配度排序
+
+   ```shell
+   db.stores.find(
+      { $text: { $search: "java coffee shop" } },
+      { score: { $meta: "textScore" } }
+   ).sort( { score: { $meta: "textScore" } } )
+   ```
+
+​    总体看来，和MySQL的全文搜索能力相差无几，需要更加复杂的功能还得上ES等其它外部引擎。
+
+ps: v3.2后支持中文。
+
+#### 哈希索引
+
+为了支持基于哈希的分片，MongoDB提供了哈希索引
+
+```shell
+db.collection.createIndex( { _id: "hashed" } )
+```
+
+不支持多个字段的复合哈希索引，但在v4.4后支持复合索引中带单个字段哈希索引
+
+```shell
+db.collection.createIndex( { "fieldA" : 1, "fieldB" : "hashed", "fieldC" : -1 } )
+```
+
+哈希索引只支持等值匹配，无法利用其范围查询。
+
+### 索引属性
+
+支持
+
+- 部分索引
+- 稀疏索引
+- TTL索引
+- 隐藏索引
+
+TODO
 
 
 
@@ -109,5 +229,6 @@ ref
 - [WiredTiger Doc](https://source.wiredtiger.com/3.0.0/tune_page_size_and_comp.html)
 - [WiredTiger Btree vs LSM Benchmark ](https://github.com/wiredtiger/wiredtiger/wiki/Btree-vs-LSM)
 - [MongoDB: How can I change engine type (from B-Tree to LSM-Tree) of _id_ index?](https://stackoverflow.com/questions/59751187/mongodb-how-can-i-change-engine-type-from-b-tree-to-lsm-tree-of-id-index)
+- [MongoDB Doc - Index](https://docs.mongodb.com/manual/indexes/)
 - [WiredTiger存储引擎之一：基础数据结构分析](https://mongoing.com/topic/archives-35143)
 
