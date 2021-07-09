@@ -64,7 +64,7 @@ params:
             limit: 5
 
         tagCloud:
-            limit: 10
+            limit: 20
 
     opengraph:
         twitter:
