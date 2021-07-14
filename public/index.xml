@@ -2,17 +2,470 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
     <channel>
         <title>路叶卡的自留地</title>
-        <link>https://example.com/</link>
+        <link>http://www.icewater.xyz/</link>
         <description>Recent content on 路叶卡的自留地</description>
         <generator>Hugo -- gohugo.io</generator>
-        <language>en-us</language>
-        <lastBuildDate>Sat, 03 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://example.com/index.xml" rel="self" type="application/rss+xml" /><item>
+        <language>en</language>
+        <lastBuildDate>Fri, 09 Jul 2021 12:26:24 +0800</lastBuildDate><atom:link href="http://www.icewater.xyz/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>Mongodb索引机制</title>
+        <link>http://www.icewater.xyz/p/mongodb%E7%B4%A2%E5%BC%95%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Fri, 09 Jul 2021 12:26:24 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/mongodb%E7%B4%A2%E5%BC%95%E6%9C%BA%E5%88%B6/</guid>
+        <description>&lt;h2 id=&#34;wiredtiger存储引擎&#34;&gt;WiredTiger存储引擎&lt;/h2&gt;
+&lt;p&gt;在MongoDB 3.2版本之后，默认的存储引擎从MMAPv1改成了WiredTiger。&lt;/p&gt;
+&lt;h3 id=&#34;相关命令&#34;&gt;相关命令&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;查看存储引擎&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;db.serverStatus&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;output&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;...
+ storageEngine: 
+   &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; name: &lt;span class=&#34;s1&#34;&gt;&amp;#39;wiredTiger&amp;#39;&lt;/span&gt;,
+     supportsCommittedReads: true,
+     oldestRequiredTimestampForCrashRecovery: Timestamp&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;0, 0&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;,
+     supportsPendingDrops: true,
+     ...
+   &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+...
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;指定存储引擎&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;启动时指定&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;mongod --storageEngine mmapv1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;或者修改配置文件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;nt&#34;&gt;storage&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;   &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;engine&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;mmapv1&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;wiredtiger-vs-mmapv1&#34;&gt;WiredTiger VS MMAPv1&lt;/h3&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h3 id=&#34;wiredtiger-机制&#34;&gt;WiredTiger 机制&lt;/h3&gt;
+&lt;p&gt;WT支持B树(B-Tree)以及LSM树(Log-Structured Merge Tree) 作为存储结构。&lt;/p&gt;
+&lt;h4 id=&#34;b-tree-vs-lsm-tree&#34;&gt;B-Tree VS LSM Tree&lt;/h4&gt;
+&lt;p&gt;B树与LSM的实现原理不在这里赘述，会另开文章（TODO）详细介绍。简单而言，B树的读性能更高而LSM的写性能更好，具体benchmark可以看官方的&lt;a class=&#34;link&#34; href=&#34;https://github.com/wiredtiger/wiredtiger/wiki/Btree-vs-LSM&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;WiredTiger Btree vs LSM Benchmark &lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://github.com/wiredtiger/wiredtiger/wiki/attachments/LSM_btree_Throughput.png&#34; alt=&#34;Pretty pictures&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;从结果上看，在读吞吐方面，B树高了一个量级不止，在写吞吐方面，LSM大约只提升10%左右，所以综合而言，还是B树更加优秀和普适。&lt;/p&gt;
+&lt;p&gt;WT默认的存储结构为B树。&lt;/p&gt;
+&lt;h4 id=&#34;b-tree-or-btree&#34;&gt;B-Tree or B+Tree&lt;/h4&gt;
+&lt;p&gt;网络上关于MongoDB的讨论经常会说到MongoDB的索引采用的是B-Tree，而MySQL（InnoDB) 采用的是 B+Tree。这个结论可以说是对的也可以说是错的。对的地方在于B+Tree本就属于B-Tree，是B-Tree的一个优化版本。毕竟MongoDB在v3.2之前确实是B-Tree，哪怕v3.2之后官方文档上也写着&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;[1]	MongoDB indexes use a B-tree data structure.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;不过在v3.2切换存储引擎为WT后，按WT的设计文档来讲，MongoDB的索引具体来讲实质是B+Tree&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;原文：&lt;/p&gt;
+&lt;p&gt;WiredTiger maintains a table&amp;rsquo;s data in memory using a data structure called a B-Tree ( B+ Tree to be specific), referring to the nodes of a B-Tree as pages. Internal pages carry only keys. The leaf pages store both keys and values.&lt;/p&gt;
+&lt;p&gt;译文：&lt;/p&gt;
+&lt;p&gt;WiredTiger 使用B-Tree（具体来说是B+Tree）作为数据结构内存中维护数据目录（table），指向以B-Tree作为页结构（page）的节点（node）。&lt;/p&gt;
+&lt;p&gt;内部页只存储索引（keys）。叶子页同时存储索引（keys）以及数据 （values）&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;所以最准确的说法是MongoDB在V3.2之后索引采用B+Tree。&lt;/p&gt;
+&lt;p&gt;TODO 补充MonogoDB B+Tree索引示意图&lt;/p&gt;
+&lt;h2 id=&#34;mongdb索引&#34;&gt;MongDB索引&lt;/h2&gt;
+&lt;h3 id=&#34;索引类型&#34;&gt;索引类型&lt;/h3&gt;
+&lt;p&gt;支持&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;单字段索引&lt;/li&gt;
+&lt;li&gt;复合（多字段）索引&lt;/li&gt;
+&lt;li&gt;多级类型索引（Multikey Index）&lt;/li&gt;
+&lt;li&gt;地理空间索引（Geospatial Index）&lt;/li&gt;
+&lt;li&gt;文本索引&lt;/li&gt;
+&lt;li&gt;哈希索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;单字段复合索引&#34;&gt;单字段、复合索引&lt;/h4&gt;
+&lt;p&gt;同RMDBS一样，MongoDB支持单字段与多字段索引&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 单字段索引&lt;/span&gt;
+db.products.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; name: &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;# 复合索引&lt;/span&gt;
+db.products.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; item: 1, quantity: -1 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; ,
+  &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; name: &lt;span class=&#34;s2&#34;&gt;&amp;#34;query for inventory&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;但是MongoDB的索引需要指定顺序（MySQL中不能指定），1为升序-1为降序，MongoDB会按照指定的顺序构建索引树。&lt;/p&gt;
+&lt;p&gt;显示指定顺序有利于使用复合索引作排序，在某些场景需要其中一些字段降序，另外字段升序排序的话可以使用到。&lt;/p&gt;
+&lt;h4 id=&#34;多级类型索引&#34;&gt;多级类型索引&lt;/h4&gt;
+&lt;p&gt;Multikey 索引主要的作用是给数组中的对象建立索引，利用点表示法声明&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.spu.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; sku.price: &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;))&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;地理空间索引&#34;&gt;地理空间索引&lt;/h4&gt;
+&lt;p&gt;支持两种特殊索引&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.mongodb.com/manual/core/2d/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;2d indexes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.mongodb.com/manual/core/2dsphere/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;2dsphere indexes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h4 id=&#34;文本索引&#34;&gt;文本索引&lt;/h4&gt;
+&lt;p&gt;支持单字段以及多字段文本索引，但是一个Collection只能有一个文本索引。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.reviews1.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; comments: &lt;span class=&#34;s2&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+db.reviews2.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
+   &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+     subject: &lt;span class=&#34;s2&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;,
+     comments: &lt;span class=&#34;s2&#34;&gt;&amp;#34;text&amp;#34;&lt;/span&gt;
+   &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+ &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;支持&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;包含搜索列表中的任一文本&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.stores.find&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$text&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$search&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;java coffee shop&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;短语匹配&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.stores.find&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$text&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$search&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;java \&amp;#34;coffee shop\&amp;#34;&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;词语排查&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.stores.find&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$text&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$search&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;java shop -coffee&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;匹配度排序&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.stores.find&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
+   &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$text&lt;/span&gt;: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$search&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;java coffee shop&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;,
+   &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; score: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$meta&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;textScore&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;.sort&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; score: &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nv&#34;&gt;$meta&lt;/span&gt;: &lt;span class=&#34;s2&#34;&gt;&amp;#34;textScore&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;​    总体看来，和MySQL的全文搜索能力相差无几，需要更加复杂的功能还得上ES等其它外部引擎。&lt;/p&gt;
+&lt;p&gt;ps: v3.2后支持中文。&lt;/p&gt;
+&lt;h4 id=&#34;哈希索引&#34;&gt;哈希索引&lt;/h4&gt;
+&lt;p&gt;为了支持基于哈希的分片，MongoDB提供了哈希索引&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.collection.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; _id: &lt;span class=&#34;s2&#34;&gt;&amp;#34;hashed&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不支持多个字段的复合哈希索引，但在v4.4后支持复合索引中带单个字段哈希索引&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.collection.createIndex&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;fieldA&amp;#34;&lt;/span&gt; : 1, &lt;span class=&#34;s2&#34;&gt;&amp;#34;fieldB&amp;#34;&lt;/span&gt; : &lt;span class=&#34;s2&#34;&gt;&amp;#34;hashed&amp;#34;&lt;/span&gt;, &lt;span class=&#34;s2&#34;&gt;&amp;#34;fieldC&amp;#34;&lt;/span&gt; : -1 &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;哈希索引只支持等值匹配，无法利用其范围查询。&lt;/p&gt;
+&lt;h3 id=&#34;索引属性&#34;&gt;索引属性&lt;/h3&gt;
+&lt;p&gt;支持&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;部分索引&lt;/li&gt;
+&lt;li&gt;稀疏索引&lt;/li&gt;
+&lt;li&gt;TTL索引&lt;/li&gt;
+&lt;li&gt;隐藏索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://source.wiredtiger.com/3.0.0/tune_page_size_and_comp.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;WiredTiger Doc&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/wiredtiger/wiredtiger/wiki/Btree-vs-LSM&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;WiredTiger Btree vs LSM Benchmark &lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://stackoverflow.com/questions/59751187/mongodb-how-can-i-change-engine-type-from-b-tree-to-lsm-tree-of-id-index&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MongoDB: How can I change engine type (from B-Tree to LSM-Tree) of &lt;em&gt;id&lt;/em&gt; index?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.mongodb.com/manual/indexes/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MongoDB Doc - Index&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://mongoing.com/topic/archives-35143&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;WiredTiger存储引擎之一：基础数据结构分析&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>K8S日志管理方案之EFK</title>
+        <link>http://www.icewater.xyz/p/k8s%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88%E4%B9%8Befk/</link>
+        <pubDate>Tue, 06 Jul 2021 20:18:45 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/k8s%E6%97%A5%E5%BF%97%E7%AE%A1%E7%90%86%E6%96%B9%E6%A1%88%E4%B9%8Befk/</guid>
+        <description>&lt;h2 id=&#34;常见日志管理方案&#34;&gt;常见日志管理方案&lt;/h2&gt;
+&lt;p&gt;在统一日志管理中，比较出名的是ELK方案，即 Elasticsearch、Logstash 和 Kibana组合。Logstash 负责日志的收集，可以从多方数据源收集将其上报至Elasticsearch；Elasticsearch是一个搜索和分析引擎，通过ES我们可以全文搜索日志以快速定位问题；Kibana则是ES的可视化界面，通过Kibana可以对数据绘制报表图。&lt;/p&gt;
+&lt;p&gt;在K8S中，比较推荐的是EFK方案，即 Elasticsearch、Fluentd 和 Kibana组合。相对于ELK，只是日志收集组件变成了Fluentd 。&lt;/p&gt;
+&lt;p&gt;所以ELK vs EFK 可以看成 Logstash  vs Fluentd 。但除了Fluentd， CNCF还推出另外一款日志收集组件Fluent Bit，Fluent Bit其实是Fluentd的子项目，相对于Fluentd更加轻量，不过因为年限不久等原因，功能上相对Fluentd少了一些。&lt;/p&gt;
+&lt;p&gt;本文主要介绍以&lt;strong&gt;Fluent Bit为日志收集组件的EFK方案&lt;/strong&gt;。&lt;/p&gt;
+&lt;h3 id=&#34;logstash--vs-fluentd&#34;&gt;Logstash  vs Fluentd&lt;/h3&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h3 id=&#34;fluentd-vs-fluentbit&#34;&gt;Fluentd vs Fluentbit&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Fluentd&lt;/th&gt;
+&lt;th&gt;Fluent Bit&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;开发语言&lt;/td&gt;
+&lt;td&gt;C &amp;amp; Ruby&lt;/td&gt;
+&lt;td&gt;C&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;依赖&lt;/td&gt;
+&lt;td&gt;依赖 Ruby Gem&lt;/td&gt;
+&lt;td&gt;无依赖，除非一些插件需要&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;内存占用&lt;/td&gt;
+&lt;td&gt;大约40MB&lt;/td&gt;
+&lt;td&gt;大约650KB&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;插件&lt;/td&gt;
+&lt;td&gt;1000+插件&lt;/td&gt;
+&lt;td&gt;70+插件&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;使用范围&lt;/td&gt;
+&lt;td&gt;容器、服务器&lt;/td&gt;
+&lt;td&gt;容器、服务器、嵌入式Linux&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h4 id=&#34;用-fluentd-还是-fluent-bit-&#34;&gt;用 Fluentd 还是 Fluent Bit ？&lt;/h4&gt;
+&lt;p&gt;无论是 Fluentd 还是 Fluent Bit 都可以单独作为日志收集组件工作。如果你需要的插件功能只有 Fluentd 才有，那只能选择 Fluentd ，如果有内存节省的需求可以考虑使用 Fluentd + Fluent Bit 组合工作， Fluent Bit 以 DaemonSet 部署到各个工作节点上负责日志收集，转发到 Fluentd 作日志的聚合以及处理&lt;/p&gt;
+&lt;p&gt;。如下图示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://dytvr9ot2sszz.cloudfront.net/wp-content/uploads/2018/06/kuberbetes-monitoring-arch-1.jpg&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;最初我们采用的就是 Fluentd + Fluent Bit 的组合，不过后面分析了我们的使用场景 Fluent Bit 已经满足，考虑到&lt;strong&gt;最小化依赖的原则以及内存的节省&lt;/strong&gt;，就移除了 Fluentd ，Fluent Bit直接作日志的收集、聚合、处理，后上传到 ES 和 S3。&lt;/p&gt;
+&lt;h2 id=&#34;k8s日志收集架构&#34;&gt;K8S日志收集架构&lt;/h2&gt;
+&lt;p&gt;K8S 本身不提供原生的日志管理方案，日志无论是输出到 stdout/stderr 还是写入文件，如果没有作持久化处理的话，当 pod 被驱逐，node 宕机等情况下，日志都会丢失。所以需要开发人员提供一种日志收集方案以使日志的生命周期与 pod 、node 相互独立。&lt;/p&gt;
+&lt;p&gt;K8S 常见的日志收集架构有：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;工作节点日志代理&lt;/li&gt;
+&lt;li&gt;sidecar 容器日志代理&lt;/li&gt;
+&lt;li&gt;应用直接暴露日志&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;工作节点日志代理&#34;&gt;工作节点日志代理&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://d33wubrfki0l68.cloudfront.net/2585cf9757d316b9030cf36d6a4e6b8ea7eedf5a/1509f/images/docs/user-guide/logging/logging-with-node-agent.png&#34; alt=&#34;Using a node level logging agent&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;通过 DaemonSet 将 logging-agent (日志收集组件)以pod的形式部署到每一个节点上，logging-agent 会监控日志文件（K8S会将自动节点上所有 Pod 的 stdout 和 stderr 重定向该日志文件），将日志发送到 Logging Backend（如 ES，Fluentd，S3 等）。&lt;/p&gt;
+&lt;p&gt;EFK方案即这种架构。&lt;/p&gt;
+&lt;h3 id=&#34;sidecar容器日志代理&#34;&gt;sidecar容器日志代理&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://d33wubrfki0l68.cloudfront.net/5bde4953b3b232c97a744496aa92e3bbfadda9ce/39767/images/docs/user-guide/logging/logging-with-streaming-sidecar.png&#34; alt=&#34;带数据流容器的边车容器&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;sidecar 容器日志代理同样需要一个节点级别的日志代理工作，这种场景主要是处理应用无法输出到 stdout/stderr的情形。&lt;/p&gt;
+&lt;p&gt;通过在 pod 里面部署多一个容器（称为 sidecar ）运行 logging-agent ，logging-agent 将应用输出的日志（可以是文件、套接字，journald 等）输出到 sidecar 的 stdout/stderr ，节点的日志代理会捕获到这些日志将其发送至 Logging Backend。&lt;/p&gt;
+&lt;h3 id=&#34;应用直接暴露日志&#34;&gt;应用直接暴露日志&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://d33wubrfki0l68.cloudfront.net/0b4444914e56a3049a54c16b44f1a6619c0b198e/260e4/images/docs/user-guide/logging/logging-from-application.png&#34; alt=&#34;Exposing logs directly from the application&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;应用内加入额外的日志处理逻辑，直接发送到 Logging Backend。&lt;/p&gt;
+&lt;h2 id=&#34;efk-实践&#34;&gt;EFK 实践&lt;/h2&gt;
+&lt;p&gt;这一节讲述 EFK 的安装，配置以及使用&lt;/p&gt;
+&lt;h4 id=&#34;安装配置&#34;&gt;安装&amp;amp;配置&lt;/h4&gt;
+&lt;p&gt;可以使用预定义的 Helm Chart 快速安装部署，或者自行单独部署 EFK 各个组件&lt;/p&gt;
+&lt;h5 id=&#34;helm-安装&#34;&gt;Helm 安装&lt;/h5&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h5 id=&#34;自定义安装&#34;&gt;自定义安装&lt;/h5&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://docs.fluentbit.io/manual/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Fluent Bit官方文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://kubernetes.io/docs/concepts/cluster-administration/logging/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;K8S日志架构&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/fluentd-elasticsearch&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;K8S 官方 EFK 配置示例&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Leetcode Linked List</title>
+        <link>http://www.icewater.xyz/p/leetcode-linked-list/</link>
+        <pubDate>Tue, 06 Jul 2021 08:18:24 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/leetcode-linked-list/</guid>
+        <description>&lt;h2 id=&#34;206-反转链表httpsleetcode-cncomproblemsreverse-linked-list&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://leetcode-cn.com/problems/reverse-linked-list/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;206. 反转链表&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。&lt;/p&gt;
+&lt;p&gt;示例 1：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;输入：head = [1,2,3,4,5]
+输出：[5,4,3,2,1]&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/**
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt; * Definition for singly-linked list.
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt; * type ListNode struct {
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt; *     Val int
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt; *     Next *ListNode
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt; * }
+&lt;/span&gt;&lt;span class=&#34;cm&#34;&gt; */&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;题解&#34;&gt;题解&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;递归&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseList&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;last&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseList&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;last&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;迭代&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseList&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pre&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cur&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;cur&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pre&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;pre&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;cur&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;cur&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;pre&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;92-反转链表-iihttpsleetcode-cncomproblemsreverse-linked-list-ii&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://leetcode-cn.com/problems/reverse-linked-list-ii/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;92. 反转链表 II&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;给你单链表的头指针 head 和两个整数 left 和 right ，其中 left &amp;lt;= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。&lt;/p&gt;
+&lt;p&gt;示例 1：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://assets.leetcode.com/uploads/2021/02/19/rev2ex2.jpg&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;输入：head = [1,2,3,4,5], left = 2, right = 4
+输出：[1,4,3,2,5]&lt;/p&gt;
+&lt;h3 id=&#34;题解-1&#34;&gt;题解&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseBetween&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;left&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;left&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseBetween&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;// 反转链表的前N个节点
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ListNode&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+    &lt;span class=&#34;nx&#34;&gt;last&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;reverseN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;head&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt;
+
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;last&lt;/span&gt;
+
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
+        <title>DDIA 分布式数据</title>
+        <link>http://www.icewater.xyz/p/ddia-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/</link>
+        <pubDate>Sat, 03 Jul 2021 10:14:53 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/ddia-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/</guid>
+        <description>&lt;img src="http://www.icewater.xyz/p/ddia-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE/cover.jpg" alt="Featured image of post DDIA 分布式数据" /&gt;&lt;h1 id=&#34;分布式数据&#34;&gt;分布式数据&lt;/h1&gt;
+&lt;p&gt;为什么需要分布式数据&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;可扩展性：当数据量，读写负载超出了单机的处理能力&lt;/li&gt;
+&lt;li&gt;容错/高可用：当部分机器出现故障时，可以切换到另外机器工作&lt;/li&gt;
+&lt;li&gt;延迟：在用户地域分布广泛时，选择访问其最近的数据中心&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;当单机处理不了当前的负载需求时，扩展方式可以是：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;垂直扩展&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;更换配置更高的机器（CPU, 内存，磁盘等）&lt;/li&gt;
+&lt;li&gt;选择热插拔组件的机器，如内存条，使用网络通信的磁盘，甚至热插拔CPU&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;水平扩展&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由一系列机器（节点）组成一个集群作为整体对外工作，节点之间的协调由软件通过网络控制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;垂直扩展的优势在于简单，没有软件协调导致的性能损耗，不存在分布式之间数据不一致，同步冲突等问题，缺点在于成本的上升速率比机器配置上升的速率更高，而且机器也不是可以无限制向上扩展。&lt;/p&gt;
+&lt;p&gt;相对而言，水平扩展的负载上限更高，廉价机器可以组成一个性价比高的集群，分散的数据除了可以容灾备份外，因地制宜选择就近数据中心可以有效减少请求延迟。但是分布式也有着部署复杂，更新冲突，同步延迟，数据不一致等问题，下面的章节将讲述分布式数据下面临的考验以及解决方案。&lt;/p&gt;
+&lt;p&gt;数据分布在多个节点有两种常见方式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;复制（&lt;em&gt;&lt;strong&gt;Replication&lt;/strong&gt;&lt;/em&gt;）
+&lt;ul&gt;
+&lt;li&gt;相同的数据副本存储在不同的节点，每个节点都拥有完备的数据&lt;/li&gt;
+&lt;li&gt;复制最大的作用的容灾备份，当一部分节点宕机后，可以切换到其它节点工作&lt;/li&gt;
+&lt;li&gt;复制同样有助于提高数据节点的性能，如在读写分离情况下，将提高系统的负荷能力&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;分区 （&lt;strong&gt;Partitioning&lt;/strong&gt;）
+&lt;ul&gt;
+&lt;li&gt;将一个完整的数据集拆分成多个子集，存储到不同的节点上&lt;/li&gt;
+&lt;li&gt;数据系统/业务代码会根据请求分析其所需的数据在哪些节点上，从而正确的从不同的节点上获取组合数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;复制和分区两种形式不是对立，它们可以单独或者组合一起工作，如各个子数据集同样可以以复制的形式冗余在不同节点上。&lt;/p&gt;
+&lt;h2 id=&#34;复制&#34;&gt;复制&lt;/h2&gt;
+&lt;p&gt;数据集总不是一成不变的，绝大部分都处于变更中，复制同步就成了首先要面对的问题。流行的三种变更复制算法如下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;单领导者&lt;/li&gt;
+&lt;li&gt;多领导者&lt;/li&gt;
+&lt;li&gt;无领导者&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;领导者（leader)是指在多副本中负责接受客户端的写入请求的副本，再写入数据到本地的同时，将变更的数据同步到其它追随者 (follower）副本上。&lt;/p&gt;
+&lt;p&gt;领导者可以接受客户端的读写数据操作，追随者只能接受读操作&lt;/p&gt;
+&lt;h3 id=&#34;单领导者&#34;&gt;单领导者&lt;/h3&gt;
+&lt;p&gt;最常见的复制模式是一个领导者加一个或者多个追随者，这种模型也成为主从结构。许多数据库都内置了这种模型的支持，如MySQL，PostgreSQL，MongoDB等。&lt;/p&gt;
+&lt;h4 id=&#34;同步复制与异步复制&#34;&gt;同步复制与异步复制&lt;/h4&gt;
+&lt;p&gt;当主库接收到写操作时，在写入到本地存储后，主库还会向从库转发数据更新操作。如果需要从库接收到数据更新操作并且从库成功更新数据后主库才向客户端相应成功写入，这种复制称为同步复制；如果只是转发了数据更新请求，但不需要等到从库确认写入主库就直接响应客户端，这种模式称为异步复制。&lt;/p&gt;
+&lt;p&gt;全部复制模式选择同步通常是不太实际的，因为单个节点失效的话就会导致整个系统不可用。所以大部分主从架构都是选择半同步——即同步复制与异步复制混用，主库只需要收到部分副本的的成功写入操作即可向客户端响应；或者选择全异步复制，这样会能更快响应客户端，但数据丢失的风险也会相应提高。&lt;/p&gt;
+&lt;h4 id=&#34;故障转移failover&#34;&gt;故障转移（failover）&lt;/h4&gt;
+&lt;p&gt;当主库宕机时，需要提升某个从库作为主库，客户端需要重新配置主库地址，从库需要切换领导者，这个过程称为故障转移。&lt;/p&gt;
+&lt;p&gt;故障转移可以人为解决，但很多情况下，我们希望得到自动故障转移的支持，即集群可以自动更新配置完成上诉操作。&lt;/p&gt;
+&lt;p&gt;自动故障转移通常包括下面步骤：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;确认主库失效
+&lt;ul&gt;
+&lt;li&gt;如何判断主库失效是个难题，可能主库与从库只是短时间内网络阻塞了&lt;/li&gt;
+&lt;li&gt;通常大多数系统只是简单的使用超时来判断主库的失效——节点之间会定时地传递消息（心跳），如果某个节点在一段时间内没有响应，则可以认为该节点失效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;选举出主库
+&lt;ul&gt;
+&lt;li&gt;当失效的节点是主库时，这时需要剩余的副本阶段选举&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;重新配置
+- 客户端更新写请求的endpoin指向新主库
+- 旧主库恢复时认可新主库，降级为从库&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h4 id=&#34;复制日志实现&#34;&gt;复制日志实现&lt;/h4&gt;
+&lt;h5 id=&#34;基于语句的复制&#34;&gt;基于语句的复制&lt;/h5&gt;
+&lt;p&gt;记录写请求的语句（如MySQL中的Insert、Update、Delete等SQL)，将其转发给从库执行&lt;/p&gt;
+&lt;p&gt;存在的问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;存在非确定性值，如调用时间函数，&lt;/li&gt;
+&lt;li&gt;执行顺序需求，如语句依赖现有数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;MySQL5.1之前只支持基于语句的复制&lt;/p&gt;
+&lt;h5 id=&#34;wal&#34;&gt;WAL&lt;/h5&gt;
+&lt;p&gt;预写式日志（Write-ahead logging， WAL)指在实际修改数据时先写入log文件，以支持事务中的回滚，MVCC等操作。日志文件包含了所有的数据库写入的仅追加字节数组，所以可以通过传输日志文件来构建一个相同的副本。&lt;/p&gt;
+&lt;p&gt;存在的问题&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;由于传输的是底层数据（字节数组），所以在存储方式发生了变化的不同数据库版本之间复制可能会出现不兼容问题&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;PostgreSQL、Oracle采用这种方式实现复制。&lt;/p&gt;
+&lt;h5 id=&#34;基于行的复制&#34;&gt;基于行的复制&lt;/h5&gt;
+&lt;p&gt;基于行的复制会以逻辑日志的形式传输以复制，逻辑日志通常以行为粒度，记录写请求前后受影响的行的前后状态，从库会将受影响的行变更为后者状态。这种方式也利于外部系统通过消费逻辑日志来捕捉数据库的变更。&lt;/p&gt;
+&lt;p&gt;MySQ支持基于行的复制，还支持基于语句混合基于行的复制。&lt;/p&gt;
+&lt;h5 id=&#34;基于触发器的复制&#34;&gt;基于触发器的复制&lt;/h5&gt;
+&lt;p&gt;当数据变更触发复制前时想要做一些额外的数据处理，处理借助外部的应用程序外，还可以借助触发器，存储过程来实现对应操作。如但数据变更时，将数据复制到另外一张表，外部程序读取该表以同步复制到其它库&lt;/p&gt;
+&lt;h4 id=&#34;复制延迟&#34;&gt;复制延迟&lt;/h4&gt;
+&lt;p&gt;在分布式系统中，网络之间的通信是有延迟甚至中断的，复制延迟也因此产生，这就造成了客户端会读取从库上的旧数据，也就是常说的数据不一致问题。在有些业务系统中对数据的一致性要求比较高，比如金钱交易等，这种场景下可能分布式不是一个好的选择。但是如果业务场景可以接受短时间内的不一致的话，术语称之为最终一致性，那么我们的重心就放在了如何缩短主从复制之间的延迟。&lt;/p&gt;
+&lt;p&gt;下面介绍一下复制延迟的例子以及解决方案&lt;/p&gt;
+&lt;h5 id=&#34;读写一致性-read-your-writes-consistency&#34;&gt;读写一致性 （read-your-writes consistency）&lt;/h5&gt;
+&lt;p&gt;当用户提交了写操作，可能会因为从库同步延迟问题看不到自己的修改，这时可以通过一些措施来保证读写一致性&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;对于只能用户自身修改的内容，可以从主库读取&lt;/li&gt;
+&lt;li&gt;制定一个时间滞后差值，禁止从复制延迟超过这个差值的从库读取&lt;/li&gt;
+&lt;li&gt;记录客户端最后一次写入的时间戳（或者其他指示写入顺序的东西），只从同步超过了这个时间戳的从库读取数据（不过需要考虑同一用户多端设备的情况)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;单调读-monotonic-reads&#34;&gt;单调读 （Monotonic reads）&lt;/h5&gt;
+&lt;p&gt;即使在客户端纯读取的场景下，也可能因为每次读取的是不同从库导致数据不一致，这时需要保证单调读：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;基于用户ID作hash来选择数据副本，确保用户的所有数据读取都来自同一个从库（除非从库发生了宕机等问题）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h5 id=&#34;一致前缀读-consistent-prefix-reads&#34;&gt;一致前缀读 （consistent prefix reads）&lt;/h5&gt;
+&lt;p&gt;由于不同的读取来自不同的从库，从库延迟不一致，导致数据的顺序混乱。这时需要保证一致前缀读——数据读取出现的顺序与其写入的顺序保持一致。可以采取&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;确保因果相关的写入都写入相同的分区&lt;/li&gt;
+&lt;li&gt;添加额外字段来标记顺序，读操作时通过顺序标识字段整合&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
         <title>Go GC</title>
-        <link>https://example.com/p/go-gc/</link>
+        <link>http://www.icewater.xyz/p/go-gc/</link>
         <pubDate>Fri, 02 Jul 2021 15:13:44 +0800</pubDate>
         
-        <guid>https://example.com/p/go-gc/</guid>
-        <description>&lt;img src="https://example.com/p/go-gc/index.jpg" alt="Featured image of post Go GC" /&gt;&lt;h1 id=&#34;gc&#34;&gt;GC&lt;/h1&gt;
+        <guid>http://www.icewater.xyz/p/go-gc/</guid>
+        <description>&lt;img src="http://www.icewater.xyz/p/go-gc/index.jpg" alt="Featured image of post Go GC" /&gt;&lt;h1 id=&#34;gc&#34;&gt;GC&lt;/h1&gt;
 &lt;p&gt;我们知道，变量会被分配到栈和堆上，而栈上分配的对象在使用完毕出栈之后会被操作系统自动回收，但是堆上的变量则不被操作系统管理，这就需要程序自己实现堆上变量的回收，否则在程序的生命周期内，进程占用的内存会一直上升，不再需要的对象一直占据内存空间，也就是发生了所谓的内存泄露。&lt;/p&gt;
 &lt;p&gt;关于堆上对象的回收，编程语言分成了两种，一种是需要开发者手动指定内存的释放，如C/C++等，当我们认为这个对象不再需要用到的时候，需要手动调用&lt;code&gt;free&lt;/code&gt;等来释放掉对象所在的内存；另外一种是具备自动垃圾回收的 ，开发者无需关注一个对象的内存释放，程序语言会自动分析堆上的对象，将不再需要的对象回收，释放对应的内存。&lt;/p&gt;
 &lt;h2 id=&#34;垃圾回收算法&#34;&gt;垃圾回收算法&lt;/h2&gt;
@@ -193,11 +646,11 @@
         </item>
         <item>
         <title>Go Schedule</title>
-        <link>https://example.com/p/go-schedule/</link>
+        <link>http://www.icewater.xyz/p/go-schedule/</link>
         <pubDate>Fri, 02 Jul 2021 11:55:58 +0800</pubDate>
         
-        <guid>https://example.com/p/go-schedule/</guid>
-        <description>&lt;img src="https://example.com/p/go-schedule/index.jpg" alt="Featured image of post Go Schedule" /&gt;&lt;h1 id=&#34;gmp调度模型&#34;&gt;GMP调度模型&lt;/h1&gt;
+        <guid>http://www.icewater.xyz/p/go-schedule/</guid>
+        <description>&lt;img src="http://www.icewater.xyz/p/go-schedule/index.jpg" alt="Featured image of post Go Schedule" /&gt;&lt;h1 id=&#34;gmp调度模型&#34;&gt;GMP调度模型&lt;/h1&gt;
 &lt;p&gt;本文Go源码版本为&lt;a class=&#34;link&#34; href=&#34;https://github.com/lyeka/go/tree/go1.14/src&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
     &gt;Go 1.14&lt;/a&gt;，示例代码只节选了相关的部分&lt;/p&gt;
 &lt;h2 id=&#34;go调度模型发展历史&#34;&gt;Go调度模型发展历史&lt;/h2&gt;
