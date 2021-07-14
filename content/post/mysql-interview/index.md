@@ -14,23 +14,92 @@ categories:
 
 
 ## 隔离级别有哪些，分别会出现什么情况
-| 隔离级别                    | 脏读 | 不可重复读 | 幻读  |
-| --------------------------- | ---- | ---------- | ----- |
-| 读未提交（read-uncommitted) | 是   | 是         | 是    |
-| 读已提交（read-committed)   | 否   | 是         | 是    |
-| 可重复读（repeatable-read)  | 否   | 否         | 是/否 |
-| 串行化（serializable)       | 否   | 否         | 否    |
-
-
-
-InnDB通过MVCC解决了可重复读下的幻读问题，但是貌似不彻底，参考 [MySQL的可重复读级别能解决幻读吗](https://juejin.cn/post/6844903799534911496)
+| 隔离级别                    | 脏读 | 不可重复读 | 幻读 |
+| --------------------------- | ---- | ---------- | ---- |
+| 读未提交（read-uncommitted) | 是   | 是         | 是   |
+| 读已提交（read-committed)   | 否   | 是         | 是   |
+| 可重复读（repeatable-read)  | 否   | 否         | 是   |
+| 串行化（serializable)       | 否   | 否         | 否   |
 
 
 - 脏读：事务没有提交的修改对其他事务也是可见的
 - 不可重复读：事务内同样的查询可能会有不同的结果，因为别的事务在此之间做了修改
 - 幻读：某个事务在读取某个范围内的记录后，别的事务又在该范围内插入了新的行
 
+
+
+ps: InnDB通过MVCC快照读以及next-key lock解决幻读问题，并且在可重复读级别下默认开启next-key lock
+
 ---
+
+## MVCC是什么，是如何实现的，算法说一下？
+
+MVCC多版本并发控制，用于在并发事务中减少锁的使用开销，以提供并发性能
+
+
+### 实现原理
+
+每行数据聚簇索引会包含两个列
+
+- trx_id——一个事务每次对某条聚集索引记录进行改动时，都会把该事务的事务id赋值给trx_id隐藏列
+- roll_point——每次对某条聚簇索引记录进行改动时，都会把旧的版本写入undo日志中。这个隐藏列就相当于一个指针，通过他找到该记录修改前的信息
+
+
+
+事务开始时会创建一个readview
+包括以下几个内容
+
+- m_ids：在生成ReadView时，当前系统中活跃的事务id列表
+- min_trx_id：在生成ReadView时，当前系统中活跃的最小的事务id，也就是m_ids中的最小值
+- max_trx_id：在生成ReadView时，系统应该分配给下一个事务的事务id值
+- creator_trx_id：生成该ReadView的事务的事务id
+
+ps: max_trx_id并不是m_ids中的最大值，而是全局递增的事务id。比如现在有事务id为1，2，3这三个事务，之后事务id为3的事务提交了，当有一个新的事务生成ReadView时，m_ids的值就包括1和2，min_trx_id的值就是1，max_trx_id的值就是4
+
+
+
+然后基于trx_id判断该行的哪个版本对当前事务是可见的
+流程图如下
+![image.png](https://i.loli.net/2021/07/14/gZJsSUnyc9t5BLb.png)
+
+总结
+**trx_id小于max_trx_id且不在m_ids列表的对当前事务可见，不满足这个条件的通过回滚指针将记录回溯到该范围内**
+
+
+### 如何解决幻读
+
+#### 为什么会出现幻读？
+
+如何A事务只是纯读的话，不会出现幻读的情况，因为selcet使用的的是快照读（当执行select操作是innodb默认会执行快照读，会记录下这次select后的结果，之后select 的时候就会返回这次快照的数据，即使其他事务提交了不会影响当前select的数据，这就实现了可重复读了）；
+而当A事务内发生可更新行为的话，此时的读是当前读，在执行这几个操作时会读取最新的版本号记录，写操作后把版本号改为了当前事务的版本号，所以即使是别的事务提交的数据也可以查询到；
+
+
+#### 如何解决幻读？
+
+1. 在相应的列上建非唯一索引
+2. `select ... from ... for update`
+
+next-key lock 相当于 index-record lock 加上 gap lock，通过锁住相关范围内的行禁止别的事务在锁范围内插入行来解决幻读问题。
+
+TODO next-key lock 锁定范围解析
+
+
+
+#### 结论
+
+**InnoDB使用mvcc解决了快照读下的幻读**
+**使用net-key lock解决了当前读下的幻读**
+
+
+
+ref
+
+- [MySQL Doc - 14.7.4 Phantom Rows](https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html)
+- [MySQL Doc - Next-Key Locks](https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html#innodb-next-key-locks)
+
+------
+
+
 
 ## InnoDB与Myisam的区
 
@@ -208,61 +277,7 @@ ref
 - [MySQL之Redo Log](https://zhuanlan.zhihu.com/p/35355751)
 - [MySQL中的重做日志（redo log），回滚日志（undo log），以及二进制日志（binlog）的简单总结](https://www.cnblogs.com/wy123/p/8365234.html)
 
----
 
-## MVCC是什么，是如何实现的，算法说一下？
-MVCC多版本并发控制，用于在并发事务中减少锁的使用开销，以提供并发性能
-
-
-### 实现原理
-每行数据聚簇索引会包含两个列
-
-- trx_id——一个事务每次对某条聚集索引记录进行改动时，都会把该事务的事务id赋值给trx_id隐藏列
-- roll_point——每次对某条聚簇索引记录进行改动时，都会把旧的版本写入undo日志中。这个隐藏列就相当于一个指针，通过他找到该记录修改前的信息
-
-
-
-事务开始时会创建一个readview
-包括以下几个内容
-
-- m_ids：在生成ReadView时，当前系统中活跃的事务id列表
-- min_trx_id：在生成ReadView时，当前系统中活跃的最小的事务id，也就是m_ids中的最小值
-- max_trx_id：在生成ReadView时，系统应该分配给下一个事务的事务id值
-- creator_trx_id：生成该ReadView的事务的事务id
-> max_trx_id并不是m_ids中的最大值，事务id是递增分配的。比如现在有事务id为1，2，3这三个事务，之后事务id为3的事务提交了，当有一个新的事务生成ReadView时，m_ids的值就包括1和2，min_trx_id的值就是1，max_trx_id的值就是4
-
-
-
-
-
-然后基于trx_id判断该行的哪个版本对当前事务是可见的
-流程图如下
-![image.png](https://cdn.nlark.com/yuque/0/2021/png/530481/1611023725098-88a9e230-0712-483a-b1b8-cbc4c040009c.png#align=left&display=inline&height=861&margin=%5Bobject%20Object%5D&name=image.png&originHeight=861&originWidth=569&size=154537&status=done&style=none&width=569)
-
-
-总结
-**trx_id小于max_trx_id且不在m_ids列表的对当前事务可见，不满足这个条件的通过回滚指针将记录回溯到该范围内**
-
-
-### 如何解决幻读
-#### 为什么会出现幻读？
-如何A事务只是纯读的话，不会出现幻读的情况，因为selcet使用的的是快照读（当执行select操作是innodb默认会执行快照读，会记录下这次select后的结果，之后select 的时候就会返回这次快照的数据，即使其他事务提交了不会影响当前select的数据，这就实现了可重复读了）；
-而当A事务内发生可更新行为的话，此时的读是当前读，在执行这几个操作时会读取最新的版本号记录，写操作后把版本号改为了当前事务的版本号，所以即使是别的事务提交的数据也可以查询到；
-
-
-#### 如何解决幻读？
-使用net-key lock，由行锁和间隙锁（gap-lock）构成，间隙锁会锁住相关范围内的行不让别的事务插入数据；
-**间隙锁依赖非唯一索引，故所以为了避免幻读的出现，需要对事务内执行更新行为相关的列加上非唯一索引**
-
-#### 结论
-InnoDB使用mvcc解决了快照读下的幻读；
-使用net-key lock解决了当前读下的幻读
-
-
-ref
-
-- [面试官：MVCC是如何实现的？](https://blog.csdn.net/zzti_erlie/article/details/110454543)
-- [InnoDB基于MVCC和next-key锁解决幻读问题](https://my.oschina.net/u/4407031/blog/4329009)
 
 ---
 
