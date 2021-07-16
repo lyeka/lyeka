@@ -9,8 +9,8 @@ hidden: false
 draft: true
 categories:
     - interview
-tag:
-    - redis
+tags:
+    - Redis
 ---
 
 ## redis 数据类型
