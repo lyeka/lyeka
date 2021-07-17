@@ -1,5 +1,5 @@
 ---
-title: "Mysql Interview"
+title: "Mysql Overview"
 description: 
 date: 2021-07-14T11:55:13+08:00
 image: 
@@ -9,7 +9,9 @@ hidden: false
 draft: true
 categories:
   - 数据库
-  - interview
+  - Overview
+tags:
+  - MySQL
 ---
 
 

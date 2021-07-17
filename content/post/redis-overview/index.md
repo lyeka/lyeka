@@ -1,5 +1,5 @@
 ---
-title: "Redis Interview"
+title: "Redis Overview"
 description: 
 date: 2021-07-15T11:53:51+08:00
 image: 
@@ -8,7 +8,7 @@ license:
 hidden: false
 draft: true
 categories:
-    - interview
+    - Overview
 tags:
     - Redis
 ---
@@ -117,7 +117,7 @@ redis2.8之前，同步方式只有全量复制一种模式，从节点通过`sy
 
 `psync`不仅只支持部分复制，主从节点都可以将某次同步改为全量复制，示意图如下
 
-![img](https://images2018.cnblogs.com/blog/1174710/201806/1174710-20180628011547892-692403928.png)
+![img](https://i.loli.net/2021/07/17/ce8q2CFS7lw9Y6R.png)
 
 全量复制的效率比较低，流程如下：
 
@@ -142,7 +142,59 @@ ref
 
 ---
 
-## 哨兵原理
+## redis 哨兵
+
+redis2.8引入了哨兵机制，主要是为了弥补主从同步机制中无法应对主节点宕机需要人工介入处理的不足，哨兵机制实现了自动故障转移（**Automatic failover**）。
+
+### 哨兵提供的能力
+
+- 监控：哨兵不断地检查主从节点是否正常工作
+- 通知：当监控的节点出现问题时通过API发出通知
+- 自动故障转移：当主节点出现故障时，提升一个从节点为新的主节点，并更新从节点的配置，切换连接到新主节点的地址
+- 配置提供：这里指的是客户端的配置。客户端通过连接哨兵来获取redis服务器的地址，这样当自动故障转移后，客户端也能获取新的连接配置。
+
+### 架构
+
+![img](https://i.loli.net/2021/07/17/NuwAi2g9ztO7Rme.png)
 
 
 
+整体架构由两部分组成：
+
+- 哨兵节点：哨兵同样是redis实例，差别在于其不存储数据。为了保证高可用，哨兵可部署多个节点
+- 数据节点
+
+ref
+
+- [Redis Sentinel Documentation](https://reRedis Sentinel Documentationnel)
+- [深入学习Redis（4）：哨兵](https://www.cnblogs.com/kismetv/p/9609938.html)
+
+---
+
+## redis 集群
+
+redis3.0后引入了集群（Cluster）功能，在保证高可用的基础上弥补了单机内存限制的不足，即增加了水平扩展能力
+
+### 集群提供的能力
+
+- 数据分片：自动将数据集哈希散列到不同的节点，从而扩充了数据存储能力
+- 高可用：当出现个别故障节点的时候，执行自动故障转移（类似于哨兵），整个节点仍旧正常对外工作
+
+### 分片算法
+
+redis采用了带虚拟节点（slot）一致性哈希（consistent hashing）来实现分片。
+
+一致性哈希算法保证了数据的分布是均匀的，且当某个节点加入、逐出的时候数据不会大规模迁移；不过当节点数目较少时，增加或者减少节点时，对于其相邻的节点还是会有较大的数据迁移影响。在加入了虚拟节点后，一个实例对应多个slot，数据的管理基本单位为slot，slot均匀分散在一致性哈希的环上；这样当某个节点加入或者逐出时，因为其对应的slot是分散的，数据迁移不会只关系到其相邻的实例，所以对于单实例的影响减少了。
+
+示意图如下：
+
+![img](https://i.loli.net/2021/07/17/6Cb8l1RxGPuzZT9.png)
+
+
+
+ref：
+
+- [Redis cluster tutorial](https://redis.io/topics/cluster-tutorial#redis-cluster-data-sharding)
+- [深入学习Redis（5）：集群](https://www.cnblogs.com/kismetv/p/9853040.html)
+
+---
