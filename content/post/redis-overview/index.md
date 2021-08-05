@@ -198,3 +198,12 @@ ref：
 - [深入学习Redis（5）：集群](https://www.cnblogs.com/kismetv/p/9853040.html)
 
 ---
+
+## 持久化
+
+
+
+ref 
+
+- [Redis Persistence](https://redis.io/topics/persistence)
+

@@ -103,7 +103,7 @@ ref
 
 
 
-## InnoDB与Myisam的区
+## InnoDB与Myisam的区别
 
 - InnoDB支持事务，外键
 - InnoDB的锁粒度支持到行级，Myisam只支持表锁
@@ -111,6 +111,44 @@ ref
 - Myisam保存总行数
 
 ---
+
+## 索引类型
+
+从多个维度划分：
+
+- 数据结构特性：
+  - B-Tree(B+Tree)
+  - Hash
+  - [R-Tree](https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_r_tree)
+- 物理存储特性：
+  - 聚簇索引
+  - 二级索引
+- 字段特性
+  - 主键索引
+  - 普通索引
+  - 前缀索引
+
+### 数据特性划分
+
+| Storage Engine                                               | Permissible Index Types            |
+| :----------------------------------------------------------- | :--------------------------------- |
+| [`InnoDB`](https://dev.mysql.com/doc/refman/5.7/en/innodb-storage-engine.html) | `BTREE`                            |
+| [`MyISAM`](https://dev.mysql.com/doc/refman/5.7/en/myisam-storage-engine.html) | `BTREE`                            |
+| [`MEMORY`](https://dev.mysql.com/doc/refman/5.7/en/memory-storage-engine.html)/`HEAP` | `HASH`, `BTREE`                    |
+| [`NDB`](https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html) | `HASH`, `BTREE` (see note in text) |
+
+ps: 
+
+- InnoDB在内部会使用自适应的HASH索引来提高性能，但开发人员无法指定
+- R-Tree用于支持多维数据的空间索引，如GIS(MySQL 5.7后支持)
+
+
+
+ref
+
+- [MySQL Doc - Create Index](https://dev.mysql.com/doc/refman/5.7/en/create-index.html)
+
+
 
 
 

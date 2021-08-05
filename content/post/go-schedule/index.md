@@ -11,7 +11,7 @@ categories:
     - go
 tags:
     - go
-    - source
+    - 源码分析
 ---
 # GMP调度模型
 
