@@ -11,6 +11,7 @@ category:
     -: go
 tag:
     -: TODO
+
 ---
 
 ## Goroutine泄漏常见场景
@@ -372,6 +373,8 @@ go func() {
 }()
 ```
 
+不过这种方式比较原始，没法做到持续监测，无法定位哪里发生了泄漏。
+
 
 
 ### 利用prometheus监控
@@ -379,6 +382,8 @@ go func() {
 prometheus提供了[sdk](https://github.com/prometheus/client_golang)用于监控程序的metrics，用于上报各种Go程序指标，可以搭配grafana可视化来监控
 
 ```go
+import "github.com/prometheus/client_golang/prometheus/promhttp"
+
 go func() {
     http.Handle("/metrics", promhttp.Handler())
     http.ListenAndServe(":2112", nil)
@@ -395,15 +400,95 @@ go func() {
 
 搭配grafana后效果图, [图源](https://ms2008.github.io/2019/06/02/golang-goroutine-leak/)
 
-![img](https://ms2008.github.io/img/in-post/goroutine-leak/goroutine-leak-1.png)
+可视化后很方便的观察goroutine是否在持续上涨。
 
-可视化后很方便的观察goroutine是否在持续上涨
+![img](https://i.loli.net/2021/08/11/7jtIzTyQNapEk5K.png)
+
+
 
 ### pprof
 
+pprof的gorotine模块提供了gorotine的详细信息
 
 
-TODO
+
+#### http endpoint
+
+**debug=1**
+
+访问地址：`http://127.0.0.1:6060/debug/pprof/goroutine?debug=1`
+
+debug=1模式下主要显示gorotine汇总信息，如总的gorotine数量，还会把相同的gorotine汇总起来显示其数量
+
+![image-20210811152924819](https://i.loli.net/2021/08/11/PwCGp5vrlhMTVk7.png)
+
+**debug=2**
+
+debug=2模式下会显示所有gorotine的详细信息，如调用栈、gorotine id、状态等
+
+![image-20210811153512025](C:\Users\mohang\AppData\Roaming\Typora\typora-user-images\image-20210811153512025.png)
+
+
+
+#### go tool pprof
+
+通过go tool pprof工具分析profile
+
+可以把profile文件下载下来再分析或者直接`go tool pprof http://localhost:6060/debug/pprof/goroutine`启动分析
+
+
+
+**top会显示各个相同goroutine的数量以及占比**
+
+```shell
+(pprof) top
+Showing nodes accounting for 1252, 99.84% of 1254 total
+Dropped 43 nodes (cum <= 6)
+Showing top 10 nodes out of 55
+      flat  flat%   sum%        cum   cum%
+      1166 92.98% 92.98%       1166 92.98%  runtime.gopark
+        86  6.86% 99.84%         86  6.86%  runtime.asyncPreempt2
+         0     0% 99.84%         11  0.88%  internal/poll.(*FD).ConnectEx
+         0     0% 99.84%         14  1.12%  internal/poll.(*pollDesc).wait
+         0     0% 99.84%         14  1.12%  internal/poll.execIO
+         0     0% 99.84%         14  1.12%  internal/poll.runtime_pollWait
+         0     0% 99.84%         11  0.88%  main.CallHttpClient
+         0     0% 99.84%         87  6.94%  main.GoLeak1.func1
+         0     0% 99.84%         86  6.86%  main.GoLeak2.func1
+         0     0% 99.84%         86  6.86%  main.LoopCaseLeak.func1
+```
+
+
+
+**通过list搜索相关的goroutine**
+
+```shell
+(pprof) list bufferChannelFilled
+Total: 1254
+ROUTINE ======================== main.bufferChannelFilled in C:\Users\mohang\study-pro\go-playground\gor\main.go
+         0         86 (flat, cum)  6.86% of Total
+         .          .    141:   }
+         .          .    142:}
+         .          .    143:
+         .          .    144:func bufferChannelFilled(ch chan int) {
+         .          .    145:   for i:=0; i<100; i++ {
+         .         86    146:           ch <- i
+         .          .    147:   }
+         .          .    148:}
+         .          .    149:
+         .          .    150:func nilChannelRead(ch chan struct{}) {
+         .          .    151:   <- ch
+```
+
+
+
+**通过web、png、svg等生成图像可视化分析goroutine之间的调用栈**
+
+```she
+(pprof) web
+```
+
+![profile002](https://i.loli.net/2021/08/11/AwFyTL8C1sxvVR4.png)
 
 
 
