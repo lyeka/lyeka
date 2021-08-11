@@ -6,11 +6,10 @@ image:
 math: 
 license: 
 hidden: false
-category:
+categories:
     - go
-tag:
+tags:
     - pprof
-
 ---
 
 ## Goroutine泄漏常见场景
@@ -76,7 +75,7 @@ func GoLeak2() {
 
 **写满了，但是没有读**
 
-```
+```go
 func bufferChannelFilled(ch chan int) {
    for i:=0; i<100; i++ {
       ch <- i

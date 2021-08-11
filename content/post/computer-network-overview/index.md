@@ -7,10 +7,10 @@ math:
 license: 
 hidden: false
 draft: true
-category:
-    -: Overview
-tag:
-    -: Computer Network
+categories:
+    - Overview
+tags:
+    - Computer Network
 ---
 ## OSI七层模型与TCP/IP四层模型，以及其对应的网络协议
 
