@@ -6,11 +6,10 @@ image:
 math: 
 license: 
 hidden: false
-draft: true
 category:
-    -: go
+    - go
 tag:
-    -: pprof
+    - pprof
 
 ---
 
