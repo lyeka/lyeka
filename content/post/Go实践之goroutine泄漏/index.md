@@ -426,7 +426,7 @@ debug=1模式下主要显示gorotine汇总信息，如总的gorotine数量，还
 
 debug=2模式下会显示所有gorotine的详细信息，如调用栈、gorotine id、状态等
 
-![image-20210811153512025](C:\Users\mohang\AppData\Roaming\Typora\typora-user-images\image-20210811153512025.png)
+![image-20210811153512025](https://i.loli.net/2021/08/11/twZQeW1JMAPOgd7.png)
 
 
 
@@ -484,7 +484,7 @@ ROUTINE ======================== main.bufferChannelFilled in C:\Users\mohang\stu
 
 **通过web、png、svg等生成图像可视化分析goroutine之间的调用栈**
 
-```she
+```shell
 (pprof) web
 ```
 
