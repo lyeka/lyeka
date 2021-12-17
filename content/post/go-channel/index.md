@@ -38,6 +38,11 @@ type hchan struct {
 }
 ```
 
+- qcount是channel中已经存在的数据的个数，dataqsiz是channel的cap，当qcount=dataqsiz时，channel阻塞，所以qcount会永远小于等于dataqsiz
+- channel内部通过互斥锁（mutex）来保证线程安全，社区中有一些无锁channel的实现，当因为无法保证FIFO或者多核条件下的性能等问题没有被接纳
+
+
+
 图示
 
 ![](https://i.loli.net/2021/08/04/7NGXd9ZI8zrSRxl.png)
@@ -99,7 +104,81 @@ func makechan(t *chantype, size int) *hchan {
 
 ### 发送
 
-TODO
+
+
+```go
+// src/runtime/chan.go
+
+func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool {
+    // 空channel的发送会阻塞
+	if c == nil {
+		if !block {
+			return false
+		}
+		gopark(nil, nil, waitReasonChanSendNilChan, traceEvGoStop, 2)
+		throw("unreachable")
+	}
+
+	...
+
+	lock(&c.lock)
+
+	// 向关闭的channel发送数据直接panic
+	if c.closed != 0 {
+		unlock(&c.lock)
+		panic(plainError("send on closed channel"))
+	}
+
+	// 1. 如果有等待的goroutine队列，从等待的队列中出列(FIFO), 向其发送数据
+	if sg := c.recvq.dequeue(); sg != nil {
+		send(c, sg, ep, func() { unlock(&c.lock) }, 3)
+		return true
+	}
+
+	// 2. buff有空间，将数据放入buff
+	if c.qcount < c.dataqsiz {
+		// Space is available in the channel buffer. Enqueue the element to send.
+		// 入buff
+		qp := chanbuf(c, c.sendx)
+        // 拷贝数据到buff
+		typedmemmove(c.elemtype, qp, ep)
+		// 更新发送索引，注意这里的buff是个环形队列
+		c.sendx++
+		if c.sendx == c.dataqsiz {
+			c.sendx = 0
+		}
+		// 元素个数+1
+		c.qcount++
+		// 解锁返回
+		unlock(&c.lock)
+		return true
+	}
+
+	if !block {
+		unlock(&c.lock)
+		return false
+	}
+
+	// 3. buff无空间，阻塞，让出P使用权
+	gp := getg()
+	// 创建一个sudog,加入channel的sendq
+	mysg := acquireSudog()
+	...
+	c.sendq.enqueue(mysg)
+	// 将发送操作的goroutine陷入阻塞睡眠，直至被chanparkcommit被唤醒
+	gopark(chanparkcommit, unsafe.Pointer(&c.lock), waitReasonChanSend, traceEvGoBlockSend, 2)
+	
+    ...
+    
+	return true
+}
+```
+
+发送可以分成三种情况
+
+1. 有等待接收的goroutine：直接发送
+2. 没有等待接收的goroutine，缓冲区未满：将数据拷贝至缓存区，发送行为返回
+3. 没有等待接收的goroutine，缓存区已满：阻塞，该goroutine让出P
 
 
 

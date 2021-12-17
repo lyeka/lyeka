@@ -6,7 +6,18 @@
     <description>Recent content in go on 路叶卡的自留地</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 02 Jul 2021 11:55:58 +0800</lastBuildDate><atom:link href="http://www.icewater.xyz/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 04 Aug 2021 14:36:15 +0800</lastBuildDate><atom:link href="http://www.icewater.xyz/tags/go/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Go Channel</title>
+      <link>http://www.icewater.xyz/p/go-channel/</link>
+      <pubDate>Wed, 04 Aug 2021 14:36:15 +0800</pubDate>
+      
+      <guid>http://www.icewater.xyz/p/go-channel/</guid>
+      <description>源码分析 内部结构 type hchan struct { qcount uint // channel中元素个数 	dataqsiz uint // 环形队列长度 	buf unsafe.Pointer // 指向dataqsiz的指针 	elemsize uint16 // 元素大小 	closed uint32 // 是否关闭 	elemtype *_type // 元素类型 	sendx uint // 发送索引 	recvx uint // 接收索引 	recvq waitq // 接收者等待列表 	sendq waitq // 发送者等待列表  lock mutex }  qcount是channel中已经存在的数据的个数，dataqsiz是channel的cap，当qcount=dataqsiz时，channel阻塞，所以qcount会永远小于等于dataqsiz channel内部通过互斥锁（mutex）来保证线程安全，社区中有一些无锁channel的实现，当因为无法保证FIFO或者多核条件下的性能等问题没有被接纳  图示
+创建 编译器会将channel的创建转换为makechan
+// src/runtime/chan.go  // makechan channel的创建 func makechan(t *chantype, size int) *hchan { elem := t.</description>
+    </item>
+    
     <item>
       <title>Go Schedule</title>
       <link>http://www.icewater.xyz/p/go-schedule/</link>

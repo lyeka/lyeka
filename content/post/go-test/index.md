@@ -1,7 +1,7 @@
 ---
-title: "{{ replace .Name "-" " " | title }}"
+title: "Go Test"
 description: 
-date: {{ .Date }}
+date: 2021-11-22T18:21:02+08:00
 image: 
 math: 
 license: 
@@ -12,3 +12,4 @@ category:
 tag:
     -: TODO
 ---
+

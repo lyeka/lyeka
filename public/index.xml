@@ -6,7 +6,1793 @@
         <description>Recent content on 路叶卡的自留地</description>
         <generator>Hugo -- gohugo.io</generator>
         <language>en</language>
-        <lastBuildDate>Fri, 09 Jul 2021 12:26:24 +0800</lastBuildDate><atom:link href="http://www.icewater.xyz/index.xml" rel="self" type="application/rss+xml" /><item>
+        <lastBuildDate>Fri, 17 Dec 2021 19:50:26 +0800</lastBuildDate><atom:link href="http://www.icewater.xyz/index.xml" rel="self" type="application/rss+xml" /><item>
+        <title>接口优化思路</title>
+        <link>http://www.icewater.xyz/p/%E6%8E%A5%E5%8F%A3%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF/</link>
+        <pubDate>Fri, 17 Dec 2021 19:50:26 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/%E6%8E%A5%E5%8F%A3%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF/</guid>
+        <description>&lt;h1 id=&#34;接口优化记录&#34;&gt;接口优化记录&lt;/h1&gt;
+&lt;h2 id=&#34;jemeter压测&#34;&gt;jemeter压测&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h2 id=&#34;pprof查看性能瓶颈&#34;&gt;pprof查看性能瓶颈&lt;/h2&gt;
+&lt;p&gt;下载profile结果文件&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;curl &amp;lt;host&amp;gt;/debug/pprof/profile -o &amp;lt;profile file name&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;go tool 分析&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;go tool pprof &amp;lt;profile file name&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;go tool 可视化&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;go tool pprof -http=:8888 &amp;lt;profile file name&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;cpu&#34;&gt;CPU&lt;/h3&gt;
+</description>
+        </item>
+        <item>
+        <title>Go Test</title>
+        <link>http://www.icewater.xyz/p/go-test/</link>
+        <pubDate>Mon, 22 Nov 2021 18:21:02 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/go-test/</guid>
+        <description></description>
+        </item>
+        <item>
+        <title>Lua Tourial</title>
+        <link>http://www.icewater.xyz/p/lua-tourial/</link>
+        <pubDate>Fri, 20 Aug 2021 10:55:34 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/lua-tourial/</guid>
+        <description>&lt;h2 id=&#34;数据类型&#34;&gt;数据类型&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;nil&lt;/li&gt;
+&lt;li&gt;boolean&lt;/li&gt;
+&lt;li&gt;number&lt;/li&gt;
+&lt;li&gt;string&lt;/li&gt;
+&lt;li&gt;function&lt;/li&gt;
+&lt;li&gt;userdata&lt;/li&gt;
+&lt;li&gt;thread&lt;/li&gt;
+&lt;li&gt;table&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;boolean&#34;&gt;boolean&lt;/h3&gt;
+&lt;p&gt;包括&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;true&lt;/li&gt;
+&lt;li&gt;false&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;lua将false以及nil视为fales，其余均是true（包括数字0）&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-lua&#34; data-lang=&#34;lua&#34;&gt;&lt;span class=&#34;kr&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;then&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;ok&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;else&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;not ok&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;end&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;-- output&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- ok&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;number&#34;&gt;number&lt;/h3&gt;
+&lt;p&gt;lua只有一种数字类型——number（双精度double）&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-lua&#34; data-lang=&#34;lua&#34;&gt;&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;0.2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;2e+1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mf&#34;&gt;2e-1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;-- output&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 2.2&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 5&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 22&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 0.2&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;string&#34;&gt;string&lt;/h3&gt;
+&lt;p&gt;单行字符串使用单引号或者多引号表示&lt;/p&gt;
+&lt;p&gt;多行字符串使用&lt;code&gt;[[]]&lt;/code&gt;表示&lt;/p&gt;
+&lt;p&gt;字符串拼接使用&lt;code&gt;..&lt;/code&gt;连接&lt;/p&gt;
+&lt;p&gt;使用&lt;code&gt;+&lt;/code&gt;可以对字符串进行算术操作，如果字符串无法转换成数字将会报错&lt;/p&gt;
+&lt;p&gt;使用&lt;code&gt;#&lt;/code&gt;来计算字符串长度&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-lua&#34; data-lang=&#34;lua&#34;&gt;&lt;span class=&#34;n&#34;&gt;str&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;[[
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    I
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    am
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;    BatMan
+&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;]]&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;..&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;\t&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;!&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;type&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;2&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;2e+1&amp;#34;&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;#&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;str&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;-- output&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;--     I&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;--     am&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;--     BatMan&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;--         !&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- number&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 22&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 24&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;table&#34;&gt;table&lt;/h3&gt;
+&lt;p&gt;table&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-lua&#34; data-lang=&#34;lua&#34;&gt;&lt;span class=&#34;n&#34;&gt;tbl&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;apple&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;pear&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;orange&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;grape&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tbl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;])&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;tbl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;foo&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;bar&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;key&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;val&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;pairs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;tbl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kr&#34;&gt;do&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;print&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;key&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;..&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34; : &amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;..&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;kr&#34;&gt;end&lt;/span&gt;
+
+&lt;span class=&#34;c1&#34;&gt;-- output&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- apple&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 1 : apple&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 2 : pear&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 3 : orange&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- 4 : grape&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;-- foo : bar&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
+        <title>分布式锁设计与实现</title>
+        <link>http://www.icewater.xyz/p/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</link>
+        <pubDate>Mon, 16 Aug 2021 14:14:07 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E8%AE%BE%E8%AE%A1%E4%B8%8E%E5%AE%9E%E7%8E%B0/</guid>
+        <description>&lt;h2 id=&#34;heading&#34;&gt;&lt;/h2&gt;
+&lt;h2 id=&#34;理论设计&#34;&gt;理论设计&lt;/h2&gt;
+&lt;p&gt;在单进程中，我们常常会使用（本地）锁来实现对资源的保护，防止多个线程之间的竞用导致该资源被不正常访问。分布式锁主要解决分布式环境下对同一资源的保护，所以需要引入第三方服务来作锁。锁实质上就是一个变量，先获取到锁的访问方对变量设值，设值之后，其它访问方尝试上锁的时候会知道此时资源被占用了而不去修改资源，从而避免了多方同时修改同一资源而导致出错。因此一般的KV存储均可以用于实现分布式锁。&lt;/p&gt;
+&lt;h3 id=&#34;选型比对&#34;&gt;选型比对&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;关系型数据库（MySQL）&lt;/li&gt;
+&lt;li&gt;Redis&lt;/li&gt;
+&lt;li&gt;Zookeeper&lt;/li&gt;
+&lt;li&gt;ETCD&lt;/li&gt;
+&lt;/ul&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;MySQL&lt;/th&gt;
+&lt;th&gt;Redis&lt;/th&gt;
+&lt;th&gt;Zookeeper&lt;/th&gt;
+&lt;th&gt;ETCD&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;CAP&lt;/td&gt;
+&lt;td&gt;ALL(Default CA)&lt;/td&gt;
+&lt;td&gt;AP&lt;/td&gt;
+&lt;td&gt;CP&lt;/td&gt;
+&lt;td&gt;CP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;性能&lt;/td&gt;
+&lt;td&gt;低&lt;/td&gt;
+&lt;td&gt;高&lt;/td&gt;
+&lt;td&gt;中等&lt;/td&gt;
+&lt;td&gt;中等&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;h2 id=&#34;redis实现&#34;&gt;Redis实现&lt;/h2&gt;
+&lt;h3 id=&#34;上锁&#34;&gt;上锁&lt;/h3&gt;
+&lt;p&gt;&lt;code&gt;SET &amp;lt;key&amp;gt; &amp;lt;value&amp;gt; NX PX &amp;lt;expire time&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;key：指的是资源的唯一标识符&lt;/li&gt;
+&lt;li&gt;value: 通常使用随机值，从而避免锁被其他方解锁，这样只有上锁的一方才有资格释放锁&lt;/li&gt;
+&lt;li&gt;expire time：锁的过期时间，为了避免上锁后系统A进入长时间阻塞或者崩溃，导致该资源长时间或者永久不可被访问&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;etcd实现&#34;&gt;ETCD实现&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://stackoverflow.com/questions/36404765/why-isnt-rdbms-partition-tolerant-in-cap-theorem-and-why-is-it-available&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Why isn&amp;rsquo;t RDBMS Partition Tolerant in CAP Theorem and why is it Available?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;http://zhangtielei.com/posts/blog-redlock-reasoning.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;基于Redis的分布式锁到底安全吗（上）？&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Go实践之goroutine泄漏</title>
+        <link>http://www.icewater.xyz/p/go%E5%AE%9E%E8%B7%B5%E4%B9%8Bgoroutine%E6%B3%84%E6%BC%8F/</link>
+        <pubDate>Tue, 10 Aug 2021 19:30:41 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/go%E5%AE%9E%E8%B7%B5%E4%B9%8Bgoroutine%E6%B3%84%E6%BC%8F/</guid>
+        <description>&lt;h2 id=&#34;goroutine泄漏常见场景&#34;&gt;Goroutine泄漏常见场景&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;死循环&lt;/li&gt;
+&lt;li&gt;channel阻塞&lt;/li&gt;
+&lt;li&gt;死锁&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;只要有可能发生阻塞的地方（导致无法正常退出函数）就有可能发生goroutine泄漏&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;发生goroutine泄漏可能是程序员本身的业务代码逻辑有误导致的，如上述的场景；&lt;/p&gt;
+&lt;p&gt;但也有可能是不恰当的使用了库导致，如使用Go的&lt;code&gt;http.Client&lt;/code&gt;向外部接口发送请求，但没有设置超时时间，假如外部接口崩了迟迟没有响应，那这个请求的goroutine就发生了泄漏。&lt;/p&gt;
+&lt;p&gt;下面列举一些导致goroutine泄漏的示例，demo可能只是个玩具很可能不会在真实环境这么写，但没关系，重点在于&lt;strong&gt;理解为什么会发生goroutine泄漏&lt;/strong&gt;以及&lt;strong&gt;如何监控和排查goroutine泄漏&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;死循环&#34;&gt;死循环&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;LoopCaseLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;l&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;channel阻塞&#34;&gt;Channel阻塞&lt;/h3&gt;
+&lt;h4 id=&#34;unbuffer-channel&#34;&gt;unbuffer channel&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;只写不读&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GoLeak1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}{}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;只读不写&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GoLeak2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; 
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;buffered-channel&#34;&gt;buffered channel&lt;/h4&gt;
+&lt;p&gt;原理同unbuffered channel阻塞导致goroutine泄漏是一样的，不过因为有buff解耦了读写的阻塞关系，所以阻塞发生相对隐蔽&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;写满了，但是没有读&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bufferChannelFilled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+   &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+      &lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;
+   &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;通过range接收channel，但channel没关闭&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;rangeCauseLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;range&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h4 id=&#34;nil-channel&#34;&gt;nil channel&lt;/h4&gt;
+&lt;p&gt;对于一个nil channel（通常出现在已经声明但没有初始化的channel变量），对于其的读写都会发生阻塞行为&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// 假设下面function传入的都是nil channel
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;nilChannelRead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;nilChannelWrite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}{}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;外部接口阻塞&#34;&gt;外部接口阻塞&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;CallHttpClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;https://www.v2ex.com/&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;get error: &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;死锁&#34;&gt;死锁&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;多次上锁但是没有释放&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;lockToLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sync&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Mutex&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+			&lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;WaitGroup 忘记Done或者Add与Done的次数不相等&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;waitGroupToLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;wg&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sync&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;WaitGroup&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;wg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;c1&#34;&gt;// ... do something
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;			&lt;span class=&#34;c1&#34;&gt;// forget wg.Done
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;			&lt;span class=&#34;c1&#34;&gt;// wg.Done()
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;wg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Wait&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;如何监控排查goroutine泄漏&#34;&gt;如何监控&amp;amp;排查Goroutine泄漏&lt;/h2&gt;
+&lt;p&gt;业务代码出差难以避免，更何况Go中创建一个goroutine太方便了，所以如何监控和排查goroutine泄漏很关键。&lt;/p&gt;
+&lt;p&gt;导致泄漏的示例代码，主要是上面列举的goroutine泄漏示例集合。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;main&lt;/span&gt;
+
+&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
+	&lt;span class=&#34;s&#34;&gt;&amp;#34;fmt&amp;#34;&lt;/span&gt;
+	&lt;span class=&#34;s&#34;&gt;&amp;#34;github.com/prometheus/client_golang/prometheus/promhttp&amp;#34;&lt;/span&gt;
+	&lt;span class=&#34;s&#34;&gt;&amp;#34;net/http&amp;#34;&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;net/http/pprof&amp;#34;&lt;/span&gt;
+	&lt;span class=&#34;s&#34;&gt;&amp;#34;runtime&amp;#34;&lt;/span&gt;
+	&lt;span class=&#34;s&#34;&gt;&amp;#34;sync&amp;#34;&lt;/span&gt;
+	&lt;span class=&#34;s&#34;&gt;&amp;#34;time&amp;#34;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;main&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;ListenAndServe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;0.0.0.0:6060&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Handle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/metrics&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;promhttp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Handler&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;ListenAndServe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;:2112&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+	
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;goroutine nums: &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;runtime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;NumGoroutine&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;LoopCaseLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GoLeak1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GoLeak2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bufferChannelFilled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;rangeCauseLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;nilChan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;nilChannelWrite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nilChan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;nilChannelRead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;nilChan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;CallHttpClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;lockToLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;waitGroupToLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+
+
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int64&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;n&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Now&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;().&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Unix&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;n&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GoLeak1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}{}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;GoLeak2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;LoopCaseLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;l&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;make&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;([]&lt;/span&gt;&lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;l&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;CallHttpClient&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;_&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Get&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;https://www.v2ex.com/&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;get error: &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;err&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;rangeCauseLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;range&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;v&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;bufferChannelFilled&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;100&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;nilChannelRead&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;nilChannelWrite&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;chan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;ch&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{}{}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;lockToLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;m&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sync&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Mutex&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;5&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+			&lt;span class=&#34;c1&#34;&gt;// ...
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;waitGroupToLeak&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;wg&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sync&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;WaitGroup&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;10&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;wg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+			&lt;span class=&#34;c1&#34;&gt;// ... do something
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;			&lt;span class=&#34;c1&#34;&gt;// forget wg.Done
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;			&lt;span class=&#34;c1&#34;&gt;// wg.Done()
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;wg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Wait&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;利用runtime包&#34;&gt;利用runtime包&lt;/h3&gt;
+&lt;p&gt;可以利用&lt;code&gt;runtime.NumGoroutine()&lt;/code&gt;输出目前的goroutine数量，如果观察到进程内goroutine数量持续上涨就有可能发生了goroutine泄漏&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Sleep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;time&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Second&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;fmt&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Println&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;goroutine nums: &amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;runtime&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;NumGoroutine&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;不过这种方式比较原始，没法做到持续监测，无法定位哪里发生了泄漏。&lt;/p&gt;
+&lt;h3 id=&#34;利用prometheus监控&#34;&gt;利用prometheus监控&lt;/h3&gt;
+&lt;p&gt;prometheus提供了&lt;a class=&#34;link&#34; href=&#34;https://github.com/prometheus/client_golang&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;sdk&lt;/a&gt;用于监控程序的metrics，用于上报各种Go程序指标，可以搭配grafana可视化来监控&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;github.com/prometheus/client_golang/prometheus/promhttp&amp;#34;&lt;/span&gt;
+
+&lt;span class=&#34;k&#34;&gt;go&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Handle&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;/metrics&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;promhttp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Handler&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;())&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;http&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;ListenAndServe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;:2112&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这里简单通过&lt;code&gt;http://localhost:2112/metrics&lt;/code&gt;地址来观测一下Go进程的metrics&lt;/p&gt;
+&lt;p&gt;下图中的 &lt;code&gt;go_goroutines&lt;/code&gt;指示了目前的goroutine数量&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/11/IBk4fhHLjirKugO.png&#34; alt=&#34;image-20210811145850434&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;搭配grafana后效果图, &lt;a class=&#34;link&#34; href=&#34;https://ms2008.github.io/2019/06/02/golang-goroutine-leak/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;图源&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;可视化后很方便的观察goroutine是否在持续上涨。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/11/7jtIzTyQNapEk5K.png&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;pprof&#34;&gt;pprof&lt;/h3&gt;
+&lt;p&gt;pprof的gorotine模块提供了gorotine的详细信息&lt;/p&gt;
+&lt;h4 id=&#34;http-endpoint&#34;&gt;http endpoint&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;debug=1&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;访问地址：&lt;code&gt;http://127.0.0.1:6060/debug/pprof/goroutine?debug=1&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;debug=1模式下主要显示gorotine汇总信息，如总的gorotine数量，还会把相同的gorotine汇总起来显示其数量&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/11/PwCGp5vrlhMTVk7.png&#34; alt=&#34;image-20210811152924819&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;debug=2&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;debug=2模式下会显示所有gorotine的详细信息，如调用栈、gorotine id、状态等&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/11/twZQeW1JMAPOgd7.png&#34; alt=&#34;image-20210811153512025&#34;  /&gt;&lt;/p&gt;
+&lt;h4 id=&#34;go-tool-pprof&#34;&gt;go tool pprof&lt;/h4&gt;
+&lt;p&gt;通过go tool pprof工具分析profile&lt;/p&gt;
+&lt;p&gt;可以把profile文件下载下来再分析或者直接&lt;code&gt;go tool pprof http://localhost:6060/debug/pprof/goroutine&lt;/code&gt;启动分析&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;top会显示各个相同goroutine的数量以及占比&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;pprof&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; top
+Showing nodes accounting &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; 1252, 99.84% of &lt;span class=&#34;m&#34;&gt;1254&lt;/span&gt; total
+Dropped &lt;span class=&#34;m&#34;&gt;43&lt;/span&gt; nodes &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;cum &amp;lt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; 6&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+Showing top &lt;span class=&#34;m&#34;&gt;10&lt;/span&gt; nodes out of &lt;span class=&#34;m&#34;&gt;55&lt;/span&gt;
+      flat  flat%   sum%        cum   cum%
+      &lt;span class=&#34;m&#34;&gt;1166&lt;/span&gt; 92.98% 92.98%       &lt;span class=&#34;m&#34;&gt;1166&lt;/span&gt; 92.98%  runtime.gopark
+        &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt;  6.86% 99.84%         &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt;  6.86%  runtime.asyncPreempt2
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;11&lt;/span&gt;  0.88%  internal/poll.&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;*FD&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;.ConnectEx
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;14&lt;/span&gt;  1.12%  internal/poll.&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;*pollDesc&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;.wait
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;14&lt;/span&gt;  1.12%  internal/poll.execIO
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;14&lt;/span&gt;  1.12%  internal/poll.runtime_pollWait
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;11&lt;/span&gt;  0.88%  main.CallHttpClient
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;87&lt;/span&gt;  6.94%  main.GoLeak1.func1
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt;  6.86%  main.GoLeak2.func1
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;     0% 99.84%         &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt;  6.86%  main.LoopCaseLeak.func1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;通过list搜索相关的goroutine&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;pprof&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; list bufferChannelFilled
+Total: &lt;span class=&#34;m&#34;&gt;1254&lt;/span&gt;
+&lt;span class=&#34;nv&#34;&gt;ROUTINE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;========================&lt;/span&gt; main.bufferChannelFilled in C:&lt;span class=&#34;se&#34;&gt;\U&lt;/span&gt;sers&lt;span class=&#34;se&#34;&gt;\m&lt;/span&gt;ohang&lt;span class=&#34;se&#34;&gt;\s&lt;/span&gt;tudy-pro&lt;span class=&#34;se&#34;&gt;\g&lt;/span&gt;o-playground&lt;span class=&#34;se&#34;&gt;\g&lt;/span&gt;or&lt;span class=&#34;se&#34;&gt;\m&lt;/span&gt;ain.go
+         &lt;span class=&#34;m&#34;&gt;0&lt;/span&gt;         &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;flat, cum&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;  6.86% of Total
+         .          .    141:   &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+         .          .    142:&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+         .          .    143:
+         .          .    144:func bufferChannelFilled&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;ch chan int&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+         .          .    145:   &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; i:&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;0&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; i&amp;lt;100&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; i++ &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+         .         &lt;span class=&#34;m&#34;&gt;86&lt;/span&gt;    146:           ch &amp;lt;- i
+         .          .    147:   &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+         .          .    148:&lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+         .          .    149:
+         .          .    150:func nilChannelRead&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;ch chan struct&lt;span class=&#34;o&#34;&gt;{})&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+         .          .    151:   &amp;lt;- ch
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;通过web、png、svg等生成图像可视化分析goroutine之间的调用栈&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;pprof&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt; web
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/11/AwFyTL8C1sxvVR4.png&#34; alt=&#34;profile002&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://segmentfault.com/a/1190000019644257&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;goroutine泄露：原理、场景、检测和防范&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://segmentfault.com/a/1190000040161853&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;跟面试官聊 Goroutine 泄露的 6 种方法，真刺激！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://prometheus.io/docs/guides/go-application/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;INSTRUMENTING A GO APPLICATION FOR PROMETHEUS&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://ms2008.github.io/2019/06/02/golang-goroutine-leak/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Goroutine 泄露排查&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.wolfogre.com/posts/go-ppof-practice/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;golang pprof 实战&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Go Channel</title>
+        <link>http://www.icewater.xyz/p/go-channel/</link>
+        <pubDate>Wed, 04 Aug 2021 14:36:15 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/go-channel/</guid>
+        <description>&lt;h2 id=&#34;源码分析&#34;&gt;源码分析&lt;/h2&gt;
+&lt;h3 id=&#34;内部结构&#34;&gt;内部结构&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;type&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;qcount&lt;/span&gt;   &lt;span class=&#34;kt&#34;&gt;uint&lt;/span&gt;           &lt;span class=&#34;c1&#34;&gt;// channel中元素个数
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;dataqsiz&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;uint&lt;/span&gt;           &lt;span class=&#34;c1&#34;&gt;// 环形队列长度
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;buf&lt;/span&gt;      &lt;span class=&#34;nx&#34;&gt;unsafe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Pointer&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 指向dataqsiz的指针
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;elemsize&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;uint16&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 元素大小
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;closed&lt;/span&gt;   &lt;span class=&#34;kt&#34;&gt;uint32&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 是否关闭
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;elemtype&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;_type&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 元素类型
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;sendx&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;uint&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// 发送索引
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;recvx&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;uint&lt;/span&gt;   &lt;span class=&#34;c1&#34;&gt;// 接收索引
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;recvq&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;waitq&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 接收者等待列表
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;sendq&lt;/span&gt;    &lt;span class=&#34;nx&#34;&gt;waitq&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 发送者等待列表
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mutex&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;qcount是channel中已经存在的数据的个数，dataqsiz是channel的cap，当qcount=dataqsiz时，channel阻塞，所以qcount会永远小于等于dataqsiz&lt;/li&gt;
+&lt;li&gt;channel内部通过互斥锁（mutex）来保证线程安全，社区中有一些无锁channel的实现，当因为无法保证FIFO或者多核条件下的性能等问题没有被接纳&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;图示&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/08/04/7NGXd9ZI8zrSRxl.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;创建&#34;&gt;创建&lt;/h3&gt;
+&lt;p&gt;编译器会将channel的创建转换为&lt;code&gt;makechan&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// src/runtime/chan.go
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;c1&#34;&gt;// makechan channel的创建
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;makechan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;chantype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt;
+	
+	&lt;span class=&#34;c1&#34;&gt;// 计算需要分配的内存大小
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;// 总共要分配的大小 = mem(元素大小*个数）+ hchanSize
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;mem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;overflow&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;math&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;MulUintptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;uintptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;overflow&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;||&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mem&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;maxAlloc&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchanSize&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;||&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nb&#34;&gt;panic&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;plainError&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;makechan: size out of range&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;c1&#34;&gt;// 分配内存
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;// 包含三种状况
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;// 1. mem==0: 元素大小为0或者无缓冲
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;// 2. 元素不包含指针
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;// 3. 元素包含指针
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;kd&#34;&gt;var&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;switch&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;mem&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// Queue or element size is zero.
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;mallocgc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchanSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// Race detector uses this location for synchronization.
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;buf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;raceaddr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;case&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;ptrdata&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// Elements do not contain pointers.
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;c1&#34;&gt;// Allocate hchan and buf in one call.
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;mallocgc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchanSize&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;buf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;unsafe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;hchanSize&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;default&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// Elements contain pointers.
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;new&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;buf&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;mallocgc&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;elemsize&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;uint16&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;elemtype&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;elem&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;dataqsiz&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;uint&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;size&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;ol&gt;
+&lt;li&gt;计算所需的内存&lt;/li&gt;
+&lt;li&gt;创建hchan，分配所需内存&lt;/li&gt;
+&lt;li&gt;填充其它标识字段&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;发送&#34;&gt;发送&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// src/runtime/chan.go
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;chansend&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;hchan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ep&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;unsafe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;block&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;bool&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;callerpc&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;uintptr&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;bool&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;c1&#34;&gt;// 空channel的发送会阻塞
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;block&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;nf&#34;&gt;gopark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;waitReasonChanSendNilChan&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;traceEvGoStop&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;nf&#34;&gt;throw&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;unreachable&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;
+
+	&lt;span class=&#34;nf&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+	&lt;span class=&#34;c1&#34;&gt;// 向关闭的channel发送数据直接panic
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;closed&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nf&#34;&gt;unlock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;nb&#34;&gt;panic&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;plainError&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;send on closed channel&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;))&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;c1&#34;&gt;// 1. 如果有等待的goroutine队列，从等待的队列中出列(FIFO), 向其发送数据
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;recvq&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;dequeue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;();&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nf&#34;&gt;send&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;sg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;unlock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;},&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;c1&#34;&gt;// 2. buff有空间，将数据放入buff
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;qcount&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;dataqsiz&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// Space is available in the channel buffer. Enqueue the element to send.
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;c1&#34;&gt;// 入buff
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;qp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;chanbuf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sendx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+        &lt;span class=&#34;c1&#34;&gt;// 拷贝数据到buff
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nf&#34;&gt;typedmemmove&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;elemtype&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;qp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;ep&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// 更新发送索引，注意这里的buff是个环形队列
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sendx&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sendx&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;dataqsiz&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+			&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sendx&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;
+		&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// 元素个数+1
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;qcount&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;++&lt;/span&gt;
+		&lt;span class=&#34;c1&#34;&gt;// 解锁返回
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;		&lt;span class=&#34;nf&#34;&gt;unlock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;block&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+		&lt;span class=&#34;nf&#34;&gt;unlock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+		&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;false&lt;/span&gt;
+	&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+	&lt;span class=&#34;c1&#34;&gt;// 3. buff无空间，阻塞，让出P使用权
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;gp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;getg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+	&lt;span class=&#34;c1&#34;&gt;// 创建一个sudog,加入channel的sendq
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nx&#34;&gt;mysg&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;acquireSudog&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;()&lt;/span&gt;
+	&lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;
+	&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;sendq&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;enqueue&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;mysg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	&lt;span class=&#34;c1&#34;&gt;// 将发送操作的goroutine陷入阻塞睡眠，直至被chanparkcommit被唤醒
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nf&#34;&gt;gopark&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;chanparkcommit&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;unsafe&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;Pointer&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;c&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;waitReasonChanSend&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;traceEvGoBlockSend&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+	
+    &lt;span class=&#34;o&#34;&gt;...&lt;/span&gt;
+    
+	&lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;true&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;发送可以分成三种情况&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;有等待接收的goroutine：直接发送&lt;/li&gt;
+&lt;li&gt;没有等待接收的goroutine，缓冲区未满：将数据拷贝至缓存区，发送行为返回&lt;/li&gt;
+&lt;li&gt;没有等待接收的goroutine，缓存区已满：阻塞，该goroutine让出P&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;接收&#34;&gt;接收&lt;/h3&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;h2 id=&#34;使用&#34;&gt;使用&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://golang.design/under-the-hood/zh-cn/part1basic/ch03lang/chan/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Go语言原本 - 3.6 通信原语&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Go Pprof</title>
+        <link>http://www.icewater.xyz/p/go-pprof/</link>
+        <pubDate>Tue, 03 Aug 2021 16:10:41 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/go-pprof/</guid>
+        <description>&lt;h2 id=&#34;具体profilling&#34;&gt;具体profilling&lt;/h2&gt;
+&lt;h3 id=&#34;cpu&#34;&gt;CPU&lt;/h3&gt;
+&lt;p&gt;命令&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# 利用curl下载profile文件&lt;/span&gt;
+curl -o cpu-profile http://127.0.0.1:6060/debug/pprof/profile
+
+&lt;span class=&#34;c1&#34;&gt;# 通过终端(命令)分析profile文件&lt;/span&gt;
+go tool pprof -http&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;:8888 .&lt;span class=&#34;se&#34;&gt;\c&lt;/span&gt;pu-profile
+
+&lt;span class=&#34;c1&#34;&gt;# 通过http可视化分析&lt;/span&gt;
+go tool pprof -http&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;:8888 .&lt;span class=&#34;se&#34;&gt;\c&lt;/span&gt;pu-profile
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
+        <title>Kafka Desgin</title>
+        <link>http://www.icewater.xyz/p/kafka-desgin/</link>
+        <pubDate>Wed, 21 Jul 2021 00:36:13 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/kafka-desgin/</guid>
+        <description>&lt;h2 id=&#34;架构&#34;&gt;架构&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/21/CRGxzZujSAQDa1H.png&#34; alt=&#34;&#34;  /&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;producer: 生产消息的业务方&lt;/li&gt;
+&lt;li&gt;consumer: 处理消息的业务方&lt;/li&gt;
+&lt;li&gt;consumer group: 若干个处理相同类型消息的consumer组成一个consumer group&lt;/li&gt;
+&lt;li&gt;topic: 自定义消息的类别，将消息进行逻辑上的划分&lt;/li&gt;
+&lt;li&gt;broker: kafka集群实例&lt;/li&gt;
+&lt;li&gt;partition: 将topic从物理上划分为若干个区，每个分区在物理上对应一个文件夹&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;持久化&#34;&gt;持久化&lt;/h2&gt;
+&lt;p&gt;kafka对于ack的消息不作删除处理，而是记录每个消费组ack这个topic的游标&lt;/p&gt;
+&lt;h3 id=&#34;文件存储机制&#34;&gt;文件存储机制&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;partition&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;对于每个partition，kafka都会创建一个目录来存储其内容，命名规则为topic+parttion序号&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;segment&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;kfaka会将同个partition的数据拆分成多个大小相等的segment以文件的形式存储，命名格式为offset值，后缀为log，数据将按顺序写入segment文件（kafka提供partition级别的消息顺序保证）。&lt;/p&gt;
+&lt;p&gt;将数据拆分成多个文件的好处是，但是当消息过期了（kafka支持消息级别的过期机制），且当某个segment最后一条消息过期了(这意味着整个segment内的消息都过期了），可以直接删除这个segment文件，从而避免在一个大文件中为了删除数据而作多余的数据搬迁工作。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;index&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;除了写入数据文件以外，kafka还会生成索引文件，索引文件（index)与数据文件（segment）以对等的形式存在，命名一致，只是后缀名不同，如下图。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://awps-assets.meituan.net/mit-x/blog-images-bundle-2015/69e4b0a6.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;每个index文件都存放其对等的log文件的稀疏索引，标记了消息在数据文件的物理偏移地址。如下图：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://awps-assets.meituan.net/mit-x/blog-images-bundle-2015/c415ed42.png&#34; alt=&#34;image&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;N表示segment的第N条消息（注意这并不是消息的offset，而是对应segment的offset），position表示这条消息的物理偏移地址。&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://mp.weixin.qq.com/s?__biz=MzAwNTQ4MTQ4NQ==&amp;amp;mid=2453575807&amp;amp;idx=1&amp;amp;sn=9c8875e6800854ed972d323d25c4a5b5&amp;amp;chksm=8cd1cd1dbba6440bf6a31764894840ccd54388e6f74d06e1304a45a36bbc65f638d3899d24a8&amp;amp;exptype=unsubscribed_card_3001_article_onlinev2_3000w_promotion_level1&amp;amp;expsessionid=1884311222645211136&amp;amp;scene=169&amp;amp;subscene=10000&amp;amp;sessionid=1621943446&amp;amp;clicktime=1621943449&amp;amp;enterid=1621943449#rd&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Redis、Kafka 和 Pulsar 消息队列对比&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://tech.meituan.com/2015/01/13/kafka-fs-design-theory.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Kafka文件存储机制那些事&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Elasticsearch Notes</title>
+        <link>http://www.icewater.xyz/p/elasticsearch-notes/</link>
+        <pubDate>Mon, 19 Jul 2021 18:22:26 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/elasticsearch-notes/</guid>
+        <description>&lt;p&gt;本文基于Elasticsearch v7.13.3版本&lt;/p&gt;
+&lt;h2 id=&#34;install&#34;&gt;install&lt;/h2&gt;
+&lt;p&gt;利用docker快速部署一个本地环境&lt;/p&gt;
+&lt;h3 id=&#34;docker&#34;&gt;docker&lt;/h3&gt;
+&lt;p&gt;安装ES&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;docker network create elastic
+docker pull docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+docker run --name es01-test --net elastic -p 9200:9200 -p 9300:9300 -e &lt;span class=&#34;s2&#34;&gt;&amp;#34;discovery.type=single-node&amp;#34;&lt;/span&gt; docker.elastic.co/elasticsearch/elasticsearch:7.13.3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;安装kibana&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;docker pull docker.elastic.co/kibana/kibana:7.13.3
+docker run --name kib01-test --net elastic -p 5601:5601 -e &lt;span class=&#34;s2&#34;&gt;&amp;#34;ELASTICSEARCH_HOSTS=http://es01-test:9200&amp;#34;&lt;/span&gt; docker.elastic.co/kibana/kibana:7.13.3
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;crud&#34;&gt;CRUD&lt;/h2&gt;
+&lt;h3 id=&#34;add-data&#34;&gt;Add Data&lt;/h3&gt;
+</description>
+        </item>
+        <item>
+        <title>Computer Network Overview</title>
+        <link>http://www.icewater.xyz/p/computer-network-overview/</link>
+        <pubDate>Mon, 19 Jul 2021 11:46:30 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/computer-network-overview/</guid>
+        <description>&lt;h2 id=&#34;osi七层模型与tcpip四层模型以及其对应的网络协议&#34;&gt;OSI七层模型与TCP/IP四层模型，以及其对应的网络协议&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;OSI七层模型&lt;/th&gt;
+&lt;th&gt;TCP/IP四层模型&lt;/th&gt;
+&lt;th&gt;网络协议&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;应用层&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;HTTP、FTP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;表示层&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Telnet&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;会话层&lt;/td&gt;
+&lt;td&gt;应用层&lt;/td&gt;
+&lt;td&gt;DNS&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;传输层&lt;/td&gt;
+&lt;td&gt;传输层&lt;/td&gt;
+&lt;td&gt;TCP、UDP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;网络层&lt;/td&gt;
+&lt;td&gt;网络层&lt;/td&gt;
+&lt;td&gt;IP、ICMP、ARP&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;数据链路层&lt;/td&gt;
+&lt;td&gt;数据链路层&lt;/td&gt;
+&lt;td&gt;Ethernet&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;物理层&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;IEEE 802.11&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.huaweicloud.com/articles/ea09f52300d846d18c01995e485c9181.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;OSI七层模型及对应的网络协议&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>MongoDB安全机制</title>
+        <link>http://www.icewater.xyz/p/mongodb%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/</link>
+        <pubDate>Thu, 15 Jul 2021 14:32:23 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/mongodb%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6/</guid>
+        <description>&lt;h2 id=&#34;开启安全机制&#34;&gt;开启安全机制&lt;/h2&gt;
+&lt;h3 id=&#34;创建超级用户&#34;&gt;创建超级用户&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;use admin
+db.createUser&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt;
+    user: &lt;span class=&#34;s2&#34;&gt;&amp;#34;root&amp;#34;&lt;/span&gt;,
+    pwd: &lt;span class=&#34;s2&#34;&gt;&amp;#34;&amp;lt;your password&amp;gt;&amp;#34;&lt;/span&gt;, 
+    roles: &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; role: &lt;span class=&#34;s2&#34;&gt;&amp;#34;userAdminAnyDatabase&amp;#34;&lt;/span&gt;, db: &lt;span class=&#34;s2&#34;&gt;&amp;#34;admin&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;, &lt;span class=&#34;s2&#34;&gt;&amp;#34;readWriteAnyDatabase&amp;#34;&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+  &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt;
+&lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;重启mongo以启用安全机制&#34;&gt;重启mongo以启用安全机制&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;关机&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;db.adminCommand&lt;span class=&#34;o&#34;&gt;(&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;{&lt;/span&gt; shutdown: &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;}&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;&lt;strong&gt;开启访问控制（开关）&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;有两种方式&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;启动时带上参数&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;mongod --auth ...&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;修改配置文件开启&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;nt&#34;&gt;security&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;    &lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;authorization&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;l&#34;&gt;enabled&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;code&gt;mongod&lt;/code&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;只有开启了auth，基于角色控制访问的限制才会生效&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Redis Overview</title>
+        <link>http://www.icewater.xyz/p/redis-overview/</link>
+        <pubDate>Thu, 15 Jul 2021 11:53:51 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/redis-overview/</guid>
+        <description>&lt;h2 id=&#34;redis-数据类型&#34;&gt;redis 数据类型&lt;/h2&gt;
+&lt;h3 id=&#34;外部数据类型&#34;&gt;外部数据类型&lt;/h3&gt;
+&lt;p&gt;基础类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;strings&lt;/li&gt;
+&lt;li&gt;hashes&lt;/li&gt;
+&lt;li&gt;lists&lt;/li&gt;
+&lt;li&gt;sets&lt;/li&gt;
+&lt;li&gt;sorted sets&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;高级类型&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;bitmaps&lt;/li&gt;
+&lt;li&gt;hyperloglogs&lt;/li&gt;
+&lt;li&gt;geospatial indexs&lt;/li&gt;
+&lt;li&gt;streams&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;内部数据结构&#34;&gt;内部数据结构&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;dict&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;SDS&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ziplist&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;quicklist&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;skiplist&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://redis.io/topics/data-types-intro&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;An introduction to Redis data types and abstractions&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;redis-string类型的底层数据结构&#34;&gt;redis string类型的底层数据结构&lt;/h2&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;k&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;sdshdr&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;len&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// buf已用长度
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;free&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// buf剩余长度
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;kt&#34;&gt;char&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;buf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;[];&lt;/span&gt;  &lt;span class=&#34;c1&#34;&gt;// 数据实际存储的地方
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;why:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;高效计算长度以及修改（追加等）操作
+&lt;ol&gt;
+&lt;li&gt;常数时间复杂度度计算字符串长度&lt;/li&gt;
+&lt;li&gt;减少内存分配次数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;支持二进制安全
+&lt;ol&gt;
+&lt;li&gt;在 Redis 中， 客户端传入服务器的协议内容、 aof 缓存、 返回给客户端的回复， 等等， 这些重要的内容都是由 sds 类型来保存的。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://redisbook.readthedocs.io/en/latest/internal-datastruct/sds.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Simple Dynamic String&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.zhihu.com/question/28705562&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;二进制安全(binary safe)是什么意思？&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;sorted-set实现&#34;&gt;sorted set实现&lt;/h2&gt;
+&lt;p&gt;基于跳表（skiplist)——多层链表，在底层全量数据的基础上，加上多层稀疏链表构成。查找时自顶向下遍历链表，类似于二分查找，将查找复杂读降低至O(logN)。&lt;/p&gt;
+&lt;h3 id=&#34;skiplist&#34;&gt;skiplist&lt;/h3&gt;
+&lt;p&gt;插入&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/16/qsGalfT3iXKLxYF.png&#34; alt=&#34;skiplist_insertions.png&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;redis实现的skiplist相邻两层并不是2:1的比例，而是通过随机数生成的算法构建多层链表，从而避免插入为了保证2:1比例而作额外的工作。&lt;/p&gt;
+&lt;p&gt;查找&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/16/9ml1Pk3CfJja85E.png&#34; alt=&#34;search_path_on_skiplist.png&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;http://zhangtielei.com/posts/blog-redis-skiplist.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Redis内部数据结构详解(6)——skiplist&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;主从同步原理&#34;&gt;主从同步原理&lt;/h2&gt;
+&lt;p&gt;为什么作主从&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;备份&lt;/li&gt;
+&lt;li&gt;容灾&lt;/li&gt;
+&lt;li&gt;读写分离，负载均衡&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;同步方式&#34;&gt;同步方式&lt;/h3&gt;
+&lt;p&gt;redis2.8之前，同步方式只有全量复制一种模式，从节点通过&lt;code&gt;sync&lt;/code&gt;命令向主节点请求全量同步；redis2.8之后支持了&lt;code&gt;psync&lt;/code&gt;用于部分复制。&lt;/p&gt;
+&lt;p&gt;主从节点都会保存一份复制偏移量（offset）用于部分复制；&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;psync&lt;/code&gt;不仅只支持部分复制，主从节点都可以将某次同步改为全量复制，示意图如下&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/17/ce8q2CFS7lw9Y6R.png&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;全量复制的效率比较低，流程如下：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主节点调用&lt;code&gt;bgsave&lt;/code&gt;fork子进程进行RDB持久化&lt;/li&gt;
+&lt;li&gt;将RDB文件通过网络发送至从节点&lt;/li&gt;
+&lt;li&gt;从节点清空旧数据，将接收到的RDB文件载入到内存中&lt;/li&gt;
+&lt;li&gt;主节点将前面执行前面步骤期间新产生的的复制缓冲区里面数据同步给从节点以追至最新状态&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;部分复制实现：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;主节点在执行写命令的同时还会将其存储一份到复制缓存区（FIFO队列）&lt;/li&gt;
+&lt;li&gt;主从节点分别维护一份复制偏移量&lt;/li&gt;
+&lt;li&gt;通过复制偏移量差来取复制缓冲区的数据来部分复制&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/kismetv/p/9236731.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深入学习Redis（3）：主从复制&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;redis-哨兵&#34;&gt;redis 哨兵&lt;/h2&gt;
+&lt;p&gt;redis2.8引入了哨兵机制，主要是为了弥补主从同步机制中无法应对主节点宕机需要人工介入处理的不足，哨兵机制实现了自动故障转移（&lt;strong&gt;Automatic failover&lt;/strong&gt;）。&lt;/p&gt;
+&lt;h3 id=&#34;哨兵提供的能力&#34;&gt;哨兵提供的能力&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;监控：哨兵不断地检查主从节点是否正常工作&lt;/li&gt;
+&lt;li&gt;通知：当监控的节点出现问题时通过API发出通知&lt;/li&gt;
+&lt;li&gt;自动故障转移：当主节点出现故障时，提升一个从节点为新的主节点，并更新从节点的配置，切换连接到新主节点的地址&lt;/li&gt;
+&lt;li&gt;配置提供：这里指的是客户端的配置。客户端通过连接哨兵来获取redis服务器的地址，这样当自动故障转移后，客户端也能获取新的连接配置。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;架构&#34;&gt;架构&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/17/NuwAi2g9ztO7Rme.png&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;整体架构由两部分组成：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;哨兵节点：哨兵同样是redis实例，差别在于其不存储数据。为了保证高可用，哨兵可部署多个节点&lt;/li&gt;
+&lt;li&gt;数据节点&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;[Redis Sentinel Documentation](https://reRedis Sentinel Documentationnel)&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/kismetv/p/9609938.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深入学习Redis（4）：哨兵&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;redis-集群&#34;&gt;redis 集群&lt;/h2&gt;
+&lt;p&gt;redis3.0后引入了集群（Cluster）功能，在保证高可用的基础上弥补了单机内存限制的不足，即增加了水平扩展能力&lt;/p&gt;
+&lt;h3 id=&#34;集群提供的能力&#34;&gt;集群提供的能力&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;数据分片：自动将数据集哈希散列到不同的节点，从而扩充了数据存储能力&lt;/li&gt;
+&lt;li&gt;高可用：当出现个别故障节点的时候，执行自动故障转移（类似于哨兵），整个节点仍旧正常对外工作&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;分片算法&#34;&gt;分片算法&lt;/h3&gt;
+&lt;p&gt;redis采用了带虚拟节点（slot）一致性哈希（consistent hashing）来实现分片。&lt;/p&gt;
+&lt;p&gt;一致性哈希算法保证了数据的分布是均匀的，且当某个节点加入、逐出的时候数据不会大规模迁移；不过当节点数目较少时，增加或者减少节点时，对于其相邻的节点还是会有较大的数据迁移影响。在加入了虚拟节点后，一个实例对应多个slot，数据的管理基本单位为slot，slot均匀分散在一致性哈希的环上；这样当某个节点加入或者逐出时，因为其对应的slot是分散的，数据迁移不会只关系到其相邻的实例，所以对于单实例的影响减少了。&lt;/p&gt;
+&lt;p&gt;示意图如下：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://i.loli.net/2021/07/17/6Cb8l1RxGPuzZT9.png&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;ref：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://redis.io/topics/cluster-tutorial#redis-cluster-data-sharding&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Redis cluster tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/kismetv/p/9853040.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深入学习Redis（5）：集群&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;持久化&#34;&gt;持久化&lt;/h2&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://redis.io/topics/persistence&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Redis Persistence&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        </item>
+        <item>
+        <title>Grpc Notes</title>
+        <link>http://www.icewater.xyz/p/grpc-notes/</link>
+        <pubDate>Wed, 14 Jul 2021 14:02:57 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/grpc-notes/</guid>
+        <description>&lt;h2 id=&#34;protobuf&#34;&gt;protobuf&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;Protocol buffers are a language-neutral, platform-neutral extensible mechanism for serializing structured data.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;Protocol Buffers（简称 protobuf）是一种不依赖语言以及平台的可扩展的数据序列化机制，类似于XML与Json，不过protobuf是一个二进制协议，理论上性能更好。&lt;/p&gt;
+&lt;p&gt;在gRPC中，protobuf除了用于作为数据传输的格式外，还作为接口描述语言（Interface description language，缩写&lt;em&gt;IDL&lt;/em&gt;）用于生成server/client的接口代码。&lt;/p&gt;
+&lt;h3 id=&#34;使用&#34;&gt;使用&lt;/h3&gt;
+&lt;h4 id=&#34;需要的工具&#34;&gt;需要的工具&lt;/h4&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/protocolbuffers/protobuf/releases&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;protobuf complier&lt;/a&gt;（简称protoc）：用于编译protobuf文件&lt;/li&gt;
+&lt;li&gt;protobuf plugin：一部分语言如C++、Java、C#等，protoc直接可以编译，一部分语言如Go等则需要额外插件的支持
+&lt;ul&gt;
+&lt;li&gt;Go
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/golang/protobuf/tree/master/protoc-gen-go&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;protoc-gen-go&lt;/a&gt;：官方插件&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://github.com/gogo/protobuf&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;gogoprotobuf&lt;/a&gt;: 第三方插件&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;本文后续没有特别说明，都是使用官方的&lt;code&gt;protoc-gen-go&lt;/code&gt;插件&lt;/p&gt;
+&lt;h4 id=&#34;编译&#34;&gt;编译&lt;/h4&gt;
+&lt;p&gt;示例proto文件&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-protobuf&#34; data-lang=&#34;protobuf&#34;&gt;&lt;span class=&#34;c1&#34;&gt;// hello.proto
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;syntax&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;proto3&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kn&#34;&gt;package&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;hello&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;option&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;go_package&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;s&#34;&gt;&amp;#34;pb/hello&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;service&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;HelloService&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;rpc&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SayHello&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HelloReq&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;returns&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;HelloResp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{};&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;message&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;HelloReq&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Name&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;optional&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;other&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;kd&#34;&gt;message&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;HelloResp&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;Result&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;k&#34;&gt;optional&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;string&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;other&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h5 id=&#34;只编译数据序列化的代码&#34;&gt;只编译数据序列化的代码&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;protoc --go_out&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;. hello.proto
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;生成的pb.go只包含了message的读写方法，不包含gRPC的代码生成（即proto中的service）部分&lt;/p&gt;
+&lt;h5 id=&#34;包含grpc代码生成&#34;&gt;包含gRPC代码生成&lt;/h5&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;protoc --go_out&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;nv&#34;&gt;plugins&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;grpc:. example.proto
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;在指定了grpc的插件后，生成的pb.go文件包还含了server/client相关得方法&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Mysql Overview</title>
+        <link>http://www.icewater.xyz/p/mysql-overview/</link>
+        <pubDate>Wed, 14 Jul 2021 11:55:13 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/mysql-overview/</guid>
+        <description>&lt;h2 id=&#34;隔离级别有哪些分别会出现什么情况&#34;&gt;隔离级别有哪些，分别会出现什么情况&lt;/h2&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;隔离级别&lt;/th&gt;
+&lt;th&gt;脏读&lt;/th&gt;
+&lt;th&gt;不可重复读&lt;/th&gt;
+&lt;th&gt;幻读&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;读未提交（read-uncommitted)&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;读已提交（read-committed)&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;可重复读（repeatable-read)&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;是&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;串行化（serializable)&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;td&gt;否&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;ul&gt;
+&lt;li&gt;脏读：事务没有提交的修改对其他事务也是可见的&lt;/li&gt;
+&lt;li&gt;不可重复读：事务内同样的查询可能会有不同的结果，因为别的事务在此之间做了修改&lt;/li&gt;
+&lt;li&gt;幻读：某个事务在读取某个范围内的记录后，别的事务又在该范围内插入了新的行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ps: InnDB通过MVCC快照读以及next-key lock解决幻读问题，并且在可重复读级别下默认开启next-key lock&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;mvcc是什么是如何实现的算法说一下&#34;&gt;MVCC是什么，是如何实现的，算法说一下？&lt;/h2&gt;
+&lt;p&gt;MVCC多版本并发控制，用于在并发事务中减少锁的使用开销，以提供并发性能&lt;/p&gt;
+&lt;h3 id=&#34;实现原理&#34;&gt;实现原理&lt;/h3&gt;
+&lt;p&gt;每行数据聚簇索引会包含两个列&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;trx_id——一个事务每次对某条聚集索引记录进行改动时，都会把该事务的事务id赋值给trx_id隐藏列&lt;/li&gt;
+&lt;li&gt;roll_point——每次对某条聚簇索引记录进行改动时，都会把旧的版本写入undo日志中。这个隐藏列就相当于一个指针，通过他找到该记录修改前的信息&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;事务开始时会创建一个readview
+包括以下几个内容&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;m_ids：在生成ReadView时，当前系统中活跃的事务id列表&lt;/li&gt;
+&lt;li&gt;min_trx_id：在生成ReadView时，当前系统中活跃的最小的事务id，也就是m_ids中的最小值&lt;/li&gt;
+&lt;li&gt;max_trx_id：在生成ReadView时，系统应该分配给下一个事务的事务id值&lt;/li&gt;
+&lt;li&gt;creator_trx_id：生成该ReadView的事务的事务id&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ps: max_trx_id并不是m_ids中的最大值，而是全局递增的事务id。比如现在有事务id为1，2，3这三个事务，之后事务id为3的事务提交了，当有一个新的事务生成ReadView时，m_ids的值就包括1和2，min_trx_id的值就是1，max_trx_id的值就是4&lt;/p&gt;
+&lt;p&gt;然后基于trx_id判断该行的哪个版本对当前事务是可见的
+流程图如下
+&lt;img src=&#34;https://i.loli.net/2021/07/14/gZJsSUnyc9t5BLb.png&#34; alt=&#34;image.png&#34;  /&gt;&lt;/p&gt;
+&lt;p&gt;总结
+&lt;strong&gt;trx_id小于max_trx_id且不在m_ids列表的对当前事务可见，不满足这个条件的通过回滚指针将记录回溯到该范围内&lt;/strong&gt;&lt;/p&gt;
+&lt;h3 id=&#34;如何解决幻读&#34;&gt;如何解决幻读&lt;/h3&gt;
+&lt;h4 id=&#34;为什么会出现幻读&#34;&gt;为什么会出现幻读？&lt;/h4&gt;
+&lt;p&gt;如何A事务只是纯读的话，不会出现幻读的情况，因为selcet使用的的是快照读（当执行select操作是innodb默认会执行快照读，会记录下这次select后的结果，之后select 的时候就会返回这次快照的数据，即使其他事务提交了不会影响当前select的数据，这就实现了可重复读了）；
+而当A事务内发生可更新行为的话，此时的读是当前读，在执行这几个操作时会读取最新的版本号记录，写操作后把版本号改为了当前事务的版本号，所以即使是别的事务提交的数据也可以查询到；&lt;/p&gt;
+&lt;h4 id=&#34;如何解决幻读-1&#34;&gt;如何解决幻读？&lt;/h4&gt;
+&lt;ol&gt;
+&lt;li&gt;在相应的列上建非唯一索引&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;select ... from ... for update&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;next-key lock 相当于 index-record lock 加上 gap lock，通过锁住相关范围内的行禁止别的事务在锁范围内插入行来解决幻读问题。&lt;/p&gt;
+&lt;p&gt;TODO next-key lock 锁定范围解析&lt;/p&gt;
+&lt;h4 id=&#34;结论&#34;&gt;结论&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;InnoDB使用mvcc解决了快照读下的幻读&lt;/strong&gt;
+&lt;strong&gt;使用net-key lock解决了当前读下的幻读&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/innodb-next-key-locking.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL Doc - 14.7.4 Phantom Rows&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/innodb-locking.html#innodb-next-key-locks&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL Doc - Next-Key Locks&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;innodb与myisam的区别&#34;&gt;InnoDB与Myisam的区别&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;InnoDB支持事务，外键&lt;/li&gt;
+&lt;li&gt;InnoDB的锁粒度支持到行级，Myisam只支持表锁&lt;/li&gt;
+&lt;li&gt;InnoDB采用&lt;a class=&#34;link&#34; href=&#34;https://www.yuque.com/lumingheng/vfbuv2/gi0e3e&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;聚簇索引&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Myisam保存总行数&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;索引类型&#34;&gt;索引类型&lt;/h2&gt;
+&lt;p&gt;从多个维度划分：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;数据结构特性：
+&lt;ul&gt;
+&lt;li&gt;B-Tree(B+Tree)&lt;/li&gt;
+&lt;li&gt;Hash&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/8.0/en/glossary.html#glos_r_tree&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;R-Tree&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;物理存储特性：
+&lt;ul&gt;
+&lt;li&gt;聚簇索引&lt;/li&gt;
+&lt;li&gt;二级索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;字段特性
+&lt;ul&gt;
+&lt;li&gt;主键索引&lt;/li&gt;
+&lt;li&gt;普通索引&lt;/li&gt;
+&lt;li&gt;前缀索引&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;数据特性划分&#34;&gt;数据特性划分&lt;/h3&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Storage Engine&lt;/th&gt;
+&lt;th style=&#34;text-align:left&#34;&gt;Permissible Index Types&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/innodb-storage-engine.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;code&gt;InnoDB&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;BTREE&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/myisam-storage-engine.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;code&gt;MyISAM&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;BTREE&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/memory-storage-engine.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;code&gt;MEMORY&lt;/code&gt;&lt;/a&gt;/&lt;code&gt;HEAP&lt;/code&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;HASH&lt;/code&gt;, &lt;code&gt;BTREE&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;&lt;code&gt;NDB&lt;/code&gt;&lt;/a&gt;&lt;/td&gt;
+&lt;td style=&#34;text-align:left&#34;&gt;&lt;code&gt;HASH&lt;/code&gt;, &lt;code&gt;BTREE&lt;/code&gt; (see note in text)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;ps:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;InnoDB在内部会使用自适应的HASH索引来提高性能，但开发人员无法指定&lt;/li&gt;
+&lt;li&gt;R-Tree用于支持多维数据的空间索引，如GIS(MySQL 5.7后支持)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://dev.mysql.com/doc/refman/5.7/en/create-index.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL Doc - Create Index&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;mysql索引用的是什么算法为什么&#34;&gt;Mysql索引用的是什么算法，为什么&lt;/h2&gt;
+&lt;p&gt;使用了B+树作为底层数据结构，
+优点&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;效率高，O(logn)效率的范围查找（因为叶子节点使用链表串联起来）且稳定，相对B树来说&lt;/li&gt;
+&lt;li&gt;相对于平衡二叉树来说，树的高度低，减少IO次数（毕竟要存储在磁盘上）&lt;/li&gt;
+&lt;li&gt;除叶子节点外只保存索引，所以节点较小，这样相同的页可存储更多的节点，也就是说每个节点的m值更多，树更低&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://time.geekbang.org/column/article/77830&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;B+树：MySQL数据库索引是如何实现的？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://segmentfault.com/a/1190000023402876&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL的索引，为什么是B+而不是平衡二叉树&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;为什么使用b数做索引&#34;&gt;为什么使用B+数做索引&lt;/h2&gt;
+&lt;p&gt;对比B数&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;B+非叶子节点只存储索引值，节点更小，一页可以存储更多的节点，减少了IO次数&lt;/li&gt;
+&lt;li&gt;B+树的叶子节点使用链表链接起来，更加适合范围查询&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;对比红黑树（AVL树）&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;B+树是多路树，红黑树是二叉树，相同数据量下，二叉树的高度会更高，IO次数就增加。AVL一般在内存中才作为索引，B+树适合存储在磁盘上&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;对比哈希（mysql其实也支持哈希索引）&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;哈希索引不支持模糊查询&lt;/li&gt;
+&lt;li&gt;哈希索引不支持范围查询&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;为什么-mongodb-索引选择b-树而-mysql-索引选择b树&#34;&gt;为什么 MongoDB 索引选择B-树，而 Mysql 索引选择B+树&lt;/h2&gt;
+&lt;p&gt;MongoDB作为NoSQL更普通用于KV查找，数据聚合性更高，B树节点中存储了索引以及数据，单点查找效率更高；
+Mysql作为关系型数据库，范围查询需求高，B+树中的叶子节点串联起来非常适合范围查找，且B+数索引节点小的优点也使其更加格式外部存储&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/kaleidoscope/p/9481991.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;为什么 MongoDB 索引选择B-树，而 Mysql 索引选择B+树&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;b树索引的最底层单元是什么什么决定了b树的高度b树的叶子节点是单向链表还是双向链表&#34;&gt;B+树索引的最底层单元是什么？什么决定了B+树的高度？B+树的叶子节点是单向链表还是双向链表?&lt;/h2&gt;
+&lt;p&gt;链表&lt;/p&gt;
+&lt;h3 id=&#34;什么决定了b树的高度&#34;&gt;什么决定了B+树的高度&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;Innodb_page_size——Innodb每页的大小&lt;/li&gt;
+&lt;li&gt;索引的大小+指针的大小——决定了B+树非叶子节点存放关键字的数量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;b树的叶子节点是单向链表还是双向链表&#34;&gt;B+树的叶子节点是单向链表还是双向链表?&lt;/h3&gt;
+&lt;p&gt;双向，可以用于order desc&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/86137284&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;为什么生产环境中B+树的高度总是3-4层？&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.csdn.net/LJFPHP/article/details/105318995&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;mysql的B+树如何存储主键和数据，磁盘io和innodb页大小的一些问题&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;怎么加索引索引什么情况下失效联合索引什么时候失效覆盖索引了解吗&#34;&gt;怎么加索引，索引什么情况下失效，联合索引什么时候失效，覆盖索引了解吗？&lt;/h2&gt;
+&lt;h3 id=&#34;索引什么情况下失效&#34;&gt;索引什么情况下失效&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;不满足最左前缀法则
+&lt;ul&gt;
+&lt;li&gt;使用范围查询后右边的索引列失效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;在索引列上使用函数&lt;/li&gt;
+&lt;li&gt;like以通配符号开头&lt;/li&gt;
+&lt;li&gt;优化器判定使用索引成本比全表扫描成本大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;联合索引什么时候失效&#34;&gt;联合索引什么时候失效&lt;/h3&gt;
+&lt;p&gt;不满足最左前缀法则&lt;/p&gt;
+&lt;h3 id=&#34;覆盖索引&#34;&gt;覆盖索引&lt;/h3&gt;
+&lt;p&gt;二级索引字段无法满足select字段需要，需要取回主键id到主键索引（聚簇索引）获取所需字段的过程称回表
+覆盖索引是指在二级索引上的索引列满足了查询所需要的字段，无需再回表查询&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://juejin.cn/post/6844903921450745863&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL中IS NULL、IS NOT NULL、!=不能用索引？胡扯！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://juejin.cn/post/6844903967365791752&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL 覆盖索引详解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;为什么不用uuid做主键影响的写入性能还是读取性能如果业务上能保证唯一性那么还需要建唯一索引吗会影响写入性能吗&#34;&gt;为什么不用uuid做主键，影响的写入性能还是读取性能？如果业务上能保证唯一性，那么还需要建唯一索引吗？会影响写入性能吗？&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;影响写性能
+&lt;ul&gt;
+&lt;li&gt;使用UUID作为主键索引插入的话，UUID是无序的，插入数据页也就不是顺序的，需要做额外的工作寻找合适的位置。写入乱序会导致频繁的页分裂操作，也就导致大量数据行的移动。而且频繁的页分裂会使页变得稀疏并被不规则的填充，导致数据碎片&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;读性能也会稍微下降
+&lt;ul&gt;
+&lt;li&gt;毕竟UUID一般比较大，而且占用空间也大&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.yuque.com/gynb7h/bkgq7y/qk8hph&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;聚簇索引和二级索引&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;acid了解吗mysql是用什么机制保证的redo-log和undo-log说一下&#34;&gt;ACID了解吗，mysql是用什么机制保证的，redo log和undo log说一下&lt;/h2&gt;
+&lt;h3 id=&#34;mysql使用什么机制保证acid&#34;&gt;mysql使用什么机制保证ACID&lt;/h3&gt;
+&lt;p&gt;mysql使用锁实现了隔离性；使用redo log实现了原子性和持久性；使用undo log实现了一致性&lt;/p&gt;
+&lt;h3 id=&#34;redo-log--undo-log&#34;&gt;redo log &amp;amp; undo log&lt;/h3&gt;
+&lt;h4 id=&#34;redo-log&#34;&gt;redo log&lt;/h4&gt;
+&lt;p&gt;&lt;strong&gt;为什么需要redo log?&lt;/strong&gt;
+对于数据页的修改不是落盘的，内存中和物理中的数据页会存在差异
+因为实时落盘性能差&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;小修改需要刷新整个页&lt;/li&gt;
+&lt;li&gt;页不是连续的，实时落盘会产生大量随机IO&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;因此在落盘间隙间DB挂了就会丢失数据
+因为需要使用redo log 来提高性能的同时保证持久性
+为什么redo log性能高&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;日志小（物理日志）&lt;/li&gt;
+&lt;li&gt;随机（IO）写入&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;redo log工作流程&lt;/strong&gt;&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;commit前将所有修改写到redo log buffer&lt;/li&gt;
+&lt;li&gt;fsync将redo log buffer刷新到磁盘（可配置）&lt;/li&gt;
+&lt;li&gt;commit&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;**
+&lt;strong&gt;redo log恢复&lt;/strong&gt;
+InnoDB在启动之前都会尝试执行恢复操作（不管上次数据库是否正常关闭）
+首先比对刷新到磁盘的LSN(Log Sequence Number)和redo log LSN，如果redo log LSN不等于（大于）磁盘上的LSN，则使用redo log 中两LSN范围内的日志进行数据恢复
+至于redo log的格式以及是怎么恢复数据的，太复杂，#TODO&lt;/p&gt;
+&lt;h4 id=&#34;undo-log&#34;&gt;undo log&lt;/h4&gt;
+&lt;p&gt;保存了事务发生之前的数据的一个版本，可以用于回滚，同时可以提供多版本并发控制下的读（MVCC），也即非锁定读
+逻辑格式的日志，在执行undo的时候，仅仅是将数据从逻辑上恢复至事务之前的状态，而不是从物理页面上操作实现的，这一点是不同于redo log的。undo log将生成与更新语句相反的语句来执行回滚（如insert生成delete）&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;《Mysql技术内幕——InnoDB存储引擎》第7章&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/35355751&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL之Redo Log&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://www.cnblogs.com/wy123/p/8365234.html&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL中的重做日志（redo log），回滚日志（undo log），以及二进制日志（binlog）的简单总结&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;锁分哪几种行锁是锁在哪里的&#34;&gt;锁分哪几种，行锁是锁在哪里的？&lt;/h2&gt;
+&lt;h3 id=&#34;锁的分类基于悲观锁实现&#34;&gt;锁的分类，基于悲观锁实现&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;表锁 —— 没有命中索引则加表锁&lt;/li&gt;
+&lt;li&gt;行锁（&lt;strong&gt;基于索引&lt;/strong&gt;）—— 当命中索引的话加行锁
+&lt;ul&gt;
+&lt;li&gt;记录锁（record lock）—— 当命中了唯一索引（包括主键索引）时&lt;/li&gt;
+&lt;li&gt;间隙锁（gap lock）—— 当命中了非唯一索引，且范围之中没有符合的数据行
+&lt;ul&gt;
+&lt;li&gt;只出现在RR隔离级别&lt;/li&gt;
+&lt;li&gt;锁定查询条件的左开右闭区间范围内的行&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;临键锁（next-key lock）—— 当命中了非唯一索引，且范围内有符合的数据行
+&lt;ul&gt;
+&lt;li&gt;只出现在RR隔离级别&lt;/li&gt;
+&lt;li&gt;锁定范围为索引B+树上的结点，如果没有命中具体结点，则为无穷&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/52678870&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深入理解数据库行锁与表锁&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;mysql-主从同步的过程是什么样的&#34;&gt;mysql 主从同步的过程是什么样的&lt;/h2&gt;
+&lt;p&gt;主从同步好处&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;读写分离，提高性能&lt;/li&gt;
+&lt;li&gt;容灾备份，高可用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;形式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;一主一从&lt;/li&gt;
+&lt;li&gt;一主多从&lt;/li&gt;
+&lt;li&gt;级联赋值&lt;/li&gt;
+&lt;li&gt;多主一从&lt;/li&gt;
+&lt;li&gt;双主复制&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;复制模式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;异步模式（默认）—— 主节点无需等待从节点工作状态&lt;/li&gt;
+&lt;li&gt;半同步模式——部分从节点commit主节点才commit&lt;/li&gt;
+&lt;li&gt;同步模式——全部从节点commit后主节点才commit&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;binlog记录格式&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;row——记录数据的变化&lt;/li&gt;
+&lt;li&gt;statement——记录SQL&lt;/li&gt;
+&lt;li&gt;mixed——混合使用，由mysql判断使用的格式&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;同步过程&#34;&gt;同步过程&lt;/h3&gt;
+&lt;p&gt;三个线程&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;主binlog dump 线程
+&lt;ul&gt;
+&lt;li&gt;对于每一个从服务器都会创建一个单独的binlog dump线程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;从IO线程&lt;/li&gt;
+&lt;li&gt;从SQL线程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ol&gt;
+&lt;li&gt;记录binlog后，主库发送信号量通知唤醒dump线程（假如该线程追赶上了主库，进入睡眠状态）；&lt;/li&gt;
+&lt;li&gt;IO线程通过将dump线程发送的事件记录到中继日志中（relay log）（通过log_pos来确定同步事件范围）&lt;/li&gt;
+&lt;li&gt;SQL线程读取中继日志来执行SQL&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;《高性能MySQL》第十章+复制&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://zhuanlan.zhihu.com/p/50597960&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;深度探索MySQL主从复制原理&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;mysql的高可用是怎么做的&#34;&gt;mysql的高可用是怎么做的&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;避免单点故障&lt;/li&gt;
+&lt;li&gt;故障转移和故障恢复&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;《高性能MySQL》第十二章——高可用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;慢查询怎么处理explain的type有几种类型你常见的有哪几种&#34;&gt;慢查询怎么处理？explain的type有几种类型，你常见的有哪几种？&lt;/h2&gt;
+&lt;h3 id=&#34;慢查询优化思路&#34;&gt;慢查询优化思路&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;开启慢日志&lt;/li&gt;
+&lt;li&gt;针对慢SQL explain 进行优化&lt;/li&gt;
+&lt;li&gt;对整体查询进行优化，确定是否是因为高并发引起锁的超时问题
+&lt;ol&gt;
+&lt;li&gt;分库分表&lt;/li&gt;
+&lt;li&gt;业务优化&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;MySQL服务器优化
+&lt;ol&gt;
+&lt;li&gt;系统参数&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;explain-type类型&#34;&gt;explain type类型&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;system
+&lt;ul&gt;
+&lt;li&gt;系统表&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;const
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;命中了主键、唯一索引且等值查询&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;eq_ref
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;连表&lt;/strong&gt;查询中&lt;strong&gt;一对一&lt;/strong&gt;关系&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ref
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;连表&lt;/strong&gt;查询中&lt;strong&gt;不是一对一&lt;/strong&gt;关系&lt;/li&gt;
+&lt;li&gt;非唯一索引的&lt;strong&gt;等值查询&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;range
+&lt;ul&gt;
+&lt;li&gt;索引上的&lt;strong&gt;范围查询&lt;/strong&gt;（between, in, &amp;lt;=&amp;gt;）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;index
+&lt;ul&gt;
+&lt;li&gt;需要扫描索引列上的全部数据&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;all
+&lt;ul&gt;
+&lt;li&gt;全表扫描&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;fulltext
+&lt;ul&gt;
+&lt;li&gt;全文搜索&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;index_merge
+&lt;ul&gt;
+&lt;li&gt;索引合并&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;ref_or_null
+&lt;ul&gt;
+&lt;li&gt;与ref相似，但是包含NULL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;unique_subquery
+&lt;ul&gt;
+&lt;li&gt;value in (select&amp;hellip;)， 子查询是唯一的列？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;index_subquery
+&lt;ul&gt;
+&lt;li&gt;value in (select&amp;hellip;)， 子查询不是唯一的列？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://juejin.cn/post/6844904149864169486&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;Mysql Explain之type详解&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://blog.51cto.com/lijianjun/1881208&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL explain type详解&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;你们的mysql数据量有多大如何分库分表分库分表以后如何查询如何做分布式事务&#34;&gt;你们的mysql数据量有多大，如何分库分表，分库分表以后如何查询，如何做分布式事务&lt;/h2&gt;
+&lt;h3 id=&#34;如何分库分表&#34;&gt;如何分库分表&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;垂直（优先）
+&lt;ul&gt;
+&lt;li&gt;库
+&lt;ul&gt;
+&lt;li&gt;业务表拆分不同的库&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;表
+&lt;ul&gt;
+&lt;li&gt;将表的字段拆分成多张表（相关度高的放在一起）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;水平
+&lt;ul&gt;
+&lt;li&gt;水平分库分表
+&lt;ul&gt;
+&lt;li&gt;作分片
+&lt;ul&gt;
+&lt;li&gt;RANGE（从0到10000一个表，10001到20000一个表）&lt;/li&gt;
+&lt;li&gt;哈希&lt;/li&gt;
+&lt;li&gt;业务模块(如地理位置，时间&amp;hellip;)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;分库分表以后如何查询如何做分布式事务&#34;&gt;分库分表以后如何查询，如何做分布式事务&lt;/h3&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://juejin.cn/post/6844903648670007310&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;MySQL 分库分表方案，总结的非常好！&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;怎么优化mysql服务器配置&#34;&gt;怎么优化mysql（服务器配置）&lt;/h2&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+&lt;p&gt;ref&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class=&#34;link&#34; href=&#34;https://binism.github.io/blog/2019/12/15/MySQL-params/#innodb%E7%BC%93%E5%86%B2%E6%B1%A0buffer-pool&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;优化MySQL服务器设置&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;了解tidb吗tidb是如何实现的&#34;&gt;了解TiDB吗，TiDB是如何实现的&lt;/h2&gt;
+&lt;p&gt;分布式关系型数据库&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;水平弹性扩展&lt;/li&gt;
+&lt;li&gt;故障自恢复及异地多活&lt;/li&gt;
+&lt;li&gt;一致性的分布式事务&lt;/li&gt;
+&lt;li&gt;高度兼容 MySQL&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;TODO&lt;/p&gt;
+</description>
+        </item>
+        <item>
+        <title>Binary Tree</title>
+        <link>http://www.icewater.xyz/p/binary-tree/</link>
+        <pubDate>Sun, 11 Jul 2021 04:50:51 +0800</pubDate>
+        
+        <guid>http://www.icewater.xyz/p/binary-tree/</guid>
+        <description>&lt;h2 id=&#34;226-翻转二叉树httpsleetcode-cncomproblemsinvert-binary-tree&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://leetcode-cn.com/problems/invert-binary-tree/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;226. 翻转二叉树&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;翻转一棵二叉树。&lt;/p&gt;
+&lt;p&gt;示例：&lt;/p&gt;
+&lt;p&gt;输入：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;     &lt;span class=&#34;m&#34;&gt;4&lt;/span&gt;
+   /   &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;     &lt;span class=&#34;m&#34;&gt;7&lt;/span&gt;
+ / &lt;span class=&#34;se&#34;&gt;\ &lt;/span&gt;  / &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;6&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;9&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;输出：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;     &lt;span class=&#34;m&#34;&gt;4&lt;/span&gt;
+   /   &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;m&#34;&gt;7&lt;/span&gt;     &lt;span class=&#34;m&#34;&gt;2&lt;/span&gt;
+ / &lt;span class=&#34;se&#34;&gt;\ &lt;/span&gt;  / &lt;span class=&#34;se&#34;&gt;\
+&lt;/span&gt;&lt;span class=&#34;se&#34;&gt;&lt;/span&gt;&lt;span class=&#34;m&#34;&gt;9&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;m&#34;&gt;3&lt;/span&gt;   &lt;span class=&#34;m&#34;&gt;1&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;题解&#34;&gt;题解&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;invertTree&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;TreeNode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;TreeNode&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;tmp&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;tmp&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;invertTree&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;invertTree&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&#34;c1&#34;&gt;// or 后序
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// invertTree(root.Left)
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// invertTree(root.Right)
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// mp := root.Left
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// root.Left = root.Right
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;c1&#34;&gt;// root.Right = tmp
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;114-二叉树展开为链表httpsleetcode-cncomproblemsflatten-binary-tree-to-linked-list&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://leetcode-cn.com/problems/flatten-binary-tree-to-linked-list/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;114. 二叉树展开为链表&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;给你二叉树的根结点 root ，请你将它展开为一个单链表：&lt;/p&gt;
+&lt;p&gt;展开后的单链表应该同样使用 TreeNode ，其中 right 子指针指向链表中下一个结点，而左子指针始终为 null 。
+展开后的单链表应该与二叉树 先序遍历 顺序相同。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://assets.leetcode.com/uploads/2021/01/14/flaten.jpg&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;h3 id=&#34;题解-1&#34;&gt;题解&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;flatten&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;TreeNode&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;  &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; 
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+   
+    &lt;span class=&#34;nf&#34;&gt;flatten&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;flatten&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;left&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;left&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;:=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;for&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!=&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt; 
+    &lt;span class=&#34;nx&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;116-填充每个节点的下一个右侧节点指针httpsleetcode-cncomproblemspopulating-next-right-pointers-in-each-node&#34;&gt;&lt;a class=&#34;link&#34; href=&#34;https://leetcode-cn.com/problems/populating-next-right-pointers-in-each-node/&#34;  target=&#34;_blank&#34; rel=&#34;noopener&#34;
+    &gt;116. 填充每个节点的下一个右侧节点指针&lt;/a&gt;&lt;/h2&gt;
+&lt;p&gt;给定一个 完美二叉树 ，其所有叶子节点都在同一层，每个父节点都有两个子节点。二叉树定义如下：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;struct&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;val&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+  &lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;next&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。&lt;/p&gt;
+&lt;p&gt;初始状态下，所有 next 指针都被设置为 NULL。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;进阶：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;你只能使用常量级额外空间。&lt;/li&gt;
+&lt;li&gt;使用递归解题也符合要求，本题中递归程序占用的栈空间不算做额外的空间复杂度。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;示例：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://assets.leetcode.com/uploads/2019/02/14/116_sample.png&#34; alt=&#34;img&#34;  /&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;输入：root &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;1,2,3,4,5,6,7&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+输出：&lt;span class=&#34;o&#34;&gt;[&lt;/span&gt;1,#,2,3,#,4,5,6,7,#&lt;span class=&#34;o&#34;&gt;]&lt;/span&gt;
+解释：给定二叉树如图 A 所示，你的函数应该填充它的每个 next 指针，以指向其下一个右侧节点，如图 B 所示。序列化的输出按层序遍历排列，同一层节点由 next 指针连接，&lt;span class=&#34;s1&#34;&gt;&amp;#39;#&amp;#39;&lt;/span&gt; 标志着每一层的结束。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h3 id=&#34;题解-2&#34;&gt;题解&lt;/h3&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-go&#34; data-lang=&#34;go&#34;&gt;&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;connect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+	&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;connectTwo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;root&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+
+&lt;span class=&#34;kd&#34;&gt;func&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;connectTwo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;node1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node2&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Node&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node1&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;==&lt;/span&gt; &lt;span class=&#34;kc&#34;&gt;nil&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+        &lt;span class=&#34;k&#34;&gt;return&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;nx&#34;&gt;node1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Next&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node2&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;connectTwo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;node1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;connectTwo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;node2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;nf&#34;&gt;connectTwo&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;node1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Right&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;nx&#34;&gt;node2&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;nx&#34;&gt;Left&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+        </item>
+        <item>
         <title>Mongodb索引机制</title>
         <link>http://www.icewater.xyz/p/mongodb%E7%B4%A2%E5%BC%95%E6%9C%BA%E5%88%B6/</link>
         <pubDate>Fri, 09 Jul 2021 12:26:24 +0800</pubDate>

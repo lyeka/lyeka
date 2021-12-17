@@ -8,9 +8,10 @@ license:
 hidden: false
 draft: true
 category:
-    -: nil
+    - 分布式系统
 tag:
-    -: TODO
+    - 分布式锁
+    
 ---
 
 
